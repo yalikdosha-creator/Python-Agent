@@ -34,6 +34,10 @@ button{color:inherit}
 h1{font-size:clamp(26px,3.3vw,42px);line-height:1.08;letter-spacing:-.035em;margin:0 0 9px;font-weight:850}
 .hero p{margin:0;color:#9bb0b8;font-size:14px;line-height:1.7;max-width:660px}
 .rank-card{width:220px;flex:0 0 220px;padding:13px 15px 12px;border:1px solid rgba(101,143,154,.22);background:linear-gradient(125deg,rgba(16,38,47,.9),rgba(9,21,29,.8));border-radius:14px;box-shadow:0 10px 30px rgba(0,0,0,.15)}
+.rank-ladder{display:flex;flex-wrap:wrap;gap:4px;margin-top:9px}
+.rank-step{padding:2px 6px;border-radius:999px;border:1px solid rgba(101,143,154,.28);color:#748b95;font:8px var(--mono);letter-spacing:.06em;white-space:nowrap}
+.rank-step.done{color:#9fe8cd;border-color:rgba(99,242,193,.4)}
+.rank-step.current{color:#0d241c;background:#63f2c1;border-color:#63f2c1;font-weight:800}
 .rank-head{display:flex;align-items:center;justify-content:space-between;color:#8ca4ae;font-size:11px;margin-bottom:7px}
 .rank-title{font-size:14px;font-weight:800;color:#e4f2f1}
 .xp-line{height:5px;border-radius:999px;background:#1e333e;margin-top:11px;overflow:hidden}
@@ -177,6 +181,9 @@ body.stage-immersive{overflow:hidden}
 .mission-limit{margin:0;padding-left:11px;border-left:1px solid #2a424c;color:#ffd98c}
 .mission-req{margin:0;padding:3px 9px;border:1px solid rgba(240,122,114,.5);border-radius:999px;background:rgba(240,122,114,.1);color:#ffb0a8;font-weight:700;letter-spacing:.04em;white-space:nowrap}
 .mission-req[hidden]{display:none}
+.view-toggle{margin-left:auto;padding:4px 11px;border:1px solid rgba(99,242,193,.4);border-radius:999px;background:rgba(99,242,193,.08);color:#9ffadf;font:700 9px var(--mono);letter-spacing:.12em;cursor:pointer;white-space:nowrap}
+.view-toggle:hover{background:rgba(99,242,193,.18)}
+#objectiveText{cursor:help}
 .level-card-req{margin-top:2px;font-size:9px;font-weight:700;letter-spacing:.05em;color:#ffb0a8}
 .editor-footer .py-subset{direction:ltr;font-family:Arial,sans-serif;color:#718e96}
 .action-row{display:flex;gap:7px;margin-bottom:11px}
@@ -228,7 +235,7 @@ body.stage-immersive{overflow:hidden}
 }
 @media(max-width:760px){
  .shell{padding:0 14px 26px}.topbar{height:65px}.brand-name{font-size:13px}.top-actions{gap:6px}.live-pill{padding:7px 8px;font-size:10px}.rank-pill{display:none}
- .hero{padding:23px 1px 18px;align-items:flex-start;flex-direction:column;gap:14px}.hero p{font-size:12px}.rank-card{width:100%;flex-basis:auto;padding:10px 12px}.rank-head{margin-bottom:4px}.xp-line{margin-top:8px}
+ .hero{padding:23px 1px 18px;align-items:flex-start;flex-direction:column;gap:14px}.hero p{font-size:12px}.rank-card{width:100%;flex-basis:auto;padding:10px 12px}.rank-head{margin-bottom:4px}.xp-line{margin-top:8px}.player-grid{grid-template-columns:1fr}.oper-pill{display:none}
  .progress-track{gap:3px;margin-bottom:13px}.progress-step{font-size:8px;gap:4px}.progress-step:after{margin-inline-start:0}.progress-dot{width:18px;height:18px;flex-basis:18px;font-size:9px}
  .hub-heading{align-items:flex-start;flex-direction:column;gap:10px}.hub-total{display:flex;align-items:center;gap:8px;padding:8px 11px}.hub-total span:last-child{margin-top:0}.level-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.level-card{min-height:270px;padding:12px 11px}
  .game-brief{align-items:stretch;flex-direction:column;gap:10px;padding:12px}.game-brief-main{grid-template-columns:1fr;gap:10px}.game-brief-copy .mission-name{font-size:21px}.game-layout{display:flex;flex-direction:column;gap:12px}.map-panel,.code-panel{width:100%}
@@ -348,19 +355,21 @@ body.stage-immersive{overflow:hidden}
 .lg-prac{background:#3b3345;color:#c9b9cf;border:1px solid rgba(213,190,220,.28)}
 .lg-lock{background:rgba(60,52,68,.9);color:#9c8ca4;border:1px solid rgba(213,190,220,.2)}
 .lg-here{background:linear-gradient(110deg,#a4f0cd,#63d9a1);color:#0c2b1e}
-.admin-panel{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:-4px 1px 12px;padding:11px 14px;border:1px solid rgba(240,196,107,.5);border-radius:14px;background:linear-gradient(120deg,rgba(64,52,26,.85),rgba(38,31,18,.92));box-shadow:0 0 24px rgba(240,196,107,.08)}
+.admin-panel[hidden]{display:none}
+.admin-panel{position:fixed;right:14px;bottom:14px;z-index:60;width:238px;display:flex;flex-direction:column;gap:9px;padding:10px 12px;border:1px solid rgba(240,196,107,.5);border-radius:12px;background:linear-gradient(120deg,rgba(64,52,26,.97),rgba(38,31,18,.98));box-shadow:0 12px 32px rgba(0,0,0,.5)}
 .admin-head{display:flex;flex-direction:column;gap:3px}
 .admin-title{color:#f0c46b;font:10px var(--mono);font-weight:900;letter-spacing:.14em}
 .admin-sub{color:#a8946a;font:8px var(--mono);letter-spacing:.12em}
-.admin-lock{display:flex;flex-direction:column;gap:9px;padding:14px 16px 16px;border-bottom:1px solid rgba(99,137,149,.2)}
+.admin-lock{display:flex;flex-direction:column;gap:7px;padding:3px 0 0}
 .admin-lock[hidden]{display:none}
 .admin-lock-title{color:#9fe8cd;font:700 10px var(--mono);letter-spacing:.14em}
 .admin-code{background:#0a1c24;border:1px solid rgba(99,242,193,.35);border-radius:8px;color:#e8f6ef;font:600 15px var(--mono);letter-spacing:.4em;padding:10px 12px;text-align:center;outline:none;width:100%;box-sizing:border-box}
 .admin-code:focus{border-color:#63f2c1;box-shadow:0 0 0 2px rgba(99,242,193,.18)}
 .admin-lock-msg{color:#ff9f95;font:700 10px var(--mono);letter-spacing:.08em}
 .admin-lock-msg[hidden]{display:none}
-.admin-actions{display:flex;flex-wrap:wrap;gap:8px}
-.admin-btn{padding:8px 12px;border-radius:9px;border:1px solid rgba(240,196,107,.45);background:rgba(240,196,107,.12);color:#f5dfa9;font:9px var(--mono);font-weight:800;letter-spacing:.09em;cursor:pointer;transition:.16s}
+.admin-actions{display:flex;flex-wrap:wrap;gap:6px}
+.admin-actions[hidden]{display:none}
+.admin-btn{padding:6px 9px;border-radius:8px;border:1px solid rgba(240,196,107,.45);background:rgba(240,196,107,.12);color:#f5dfa9;font:8.5px var(--mono);font-weight:800;letter-spacing:.08em;cursor:pointer;transition:.16s}
 .admin-btn:hover{background:rgba(240,196,107,.24);box-shadow:0 4px 14px rgba(240,196,107,.18);transform:translateY(-1px)}
 .admin-btn.danger{border-color:rgba(240,122,114,.5);background:rgba(240,122,114,.12);color:#ffc6bd}
 .admin-btn.danger:hover{background:rgba(240,122,114,.24);box-shadow:0 4px 14px rgba(240,122,114,.2)}
@@ -378,6 +387,41 @@ body.stage-immersive{overflow:hidden}
  .level-card-desc{font-size:8px}.level-card-title{font-size:13px}.level-seal{width:54px;height:54px;flex-basis:54px;font-size:21px}.stage-medallion{flex-basis:60px;width:60px;height:60px}.level-card-top{min-height:61px}.level-state{font-size:6.4px;padding:4px 6px}
  .map-label{font-size:7px}
 }
+
+/* --- operative registration --- */
+.player-screen{padding:26px 2px 40px}
+.player-screen[hidden]{display:none}
+.player-wrap{max-width:880px;margin:0 auto}
+.player-intro h1{margin:8px 0 6px;color:#eaf6f2;font-size:26px;letter-spacing:-.02em}
+.player-intro p{margin:0 0 18px;color:#9bb0b8;font-size:13px;line-height:1.6;max-width:640px}
+.player-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}
+.player-card{border:1px solid rgba(101,143,154,.24);background:linear-gradient(130deg,rgba(16,38,47,.9),rgba(9,21,29,.82));border-radius:14px;padding:14px 15px;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+.player-card-title{color:#8ca4ae;font:9px var(--mono);font-weight:800;letter-spacing:.16em;margin-bottom:10px}
+.player-list{display:flex;flex-direction:column;gap:8px;min-height:64px}
+.player-empty{color:#748b95;font:11px var(--mono);padding:10px 2px;line-height:1.6}
+.player-row{display:flex;align-items:center;gap:8px;padding:9px 11px;border:1px solid rgba(101,143,154,.22);border-radius:11px;background:rgba(10,24,31,.6)}
+.player-row.continue{border-color:rgba(99,242,193,.55);box-shadow:0 0 14px rgba(99,242,193,.12)}
+.player-name{flex:1;color:#e4f2f1;font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.player-meta{color:#8ca4ae;font:9.5px var(--mono);white-space:nowrap}
+.player-enter{padding:6px 11px;border-radius:8px;border:1px solid rgba(99,242,193,.45);background:rgba(99,242,193,.12);color:#bdf7e2;font:9px var(--mono);font-weight:800;letter-spacing:.08em;cursor:pointer;transition:.16s}
+.player-enter:hover{background:rgba(99,242,193,.24)}
+.player-del{padding:6px 8px;border-radius:8px;border:1px solid rgba(240,122,114,.4);background:transparent;color:#e8a29b;font:9px var(--mono);font-weight:800;cursor:pointer;transition:.16s}
+.player-del[data-arm="1"]{background:rgba(240,122,114,.22);color:#ffd7d1}
+.player-create{display:flex;flex-direction:column;gap:9px}
+.player-input{background:#0a1c24;border:1px solid rgba(99,242,193,.35);border-radius:9px;color:#e8f6ef;font:600 14px var(--mono);padding:10px 12px;outline:none;width:100%;box-sizing:border-box}
+.player-input:focus{border-color:#63f2c1;box-shadow:0 0 0 2px rgba(99,242,193,.18)}
+.player-create-btn{padding:10px;border:none;border-radius:9px;background:linear-gradient(110deg,#bdf7e2,#63f2c1);color:#0b2b21;font:11px var(--mono);font-weight:900;letter-spacing:.12em;cursor:pointer;transition:.16s}
+.player-create-btn:hover{filter:brightness(1.06);box-shadow:0 6px 18px rgba(99,242,193,.25)}
+.player-msg{font:10.5px var(--mono);line-height:1.55}
+.player-msg[hidden]{display:none}
+.player-msg.bad{color:#ff9f95}
+.player-suggest{display:flex;flex-wrap:wrap;gap:6px}
+.player-chip{padding:5px 10px;border-radius:999px;border:1px solid rgba(240,196,107,.5);background:rgba(240,196,107,.1);color:#f5dfa9;font:9.5px var(--mono);font-weight:800;cursor:pointer;transition:.16s}
+.player-chip:hover{background:rgba(240,196,107,.25)}
+.oper-pill{border:1px solid rgba(240,196,107,.35);background:rgba(64,52,26,.5);border-radius:999px;padding:8px 12px;display:flex;align-items:center;gap:6px;color:#d9c28f;font-size:11px;cursor:pointer;white-space:nowrap}
+.oper-pill:hover{background:rgba(64,52,26,.8)}
+.oper-pill strong{color:#f0c46b;font-size:12px}
+.oper-pill[hidden]{display:none}
 </style>
 </head>
 <body>
@@ -392,21 +436,48 @@ body.stage-immersive{overflow:hidden}
     <div class="top-actions">
       <div class="live-pill"><i class="live-dot"></i><span>SIMULATOR ONLINE</span></div>
       <div class="rank-pill">RANK: <strong id="topRank">Cadet</strong></div>
+      <div class="oper-pill" id="operPill" hidden title="Switch operative">AGENT: <strong id="operName"></strong></div>
     </div>
   </header>
+
+  <main id="playerScreen" class="player-screen">
+    <div class="player-wrap">
+      <div class="player-intro">
+        <div class="eyebrow">CLEARANCE DESK // AGENT REGISTRATION</div>
+        <h1>Identify yourself, agent.</h1>
+        <p>Every operative gets a private file — stars, code drafts, and rank are saved in this browser and survive game updates. Pick your existing file, or open a new one.</p>
+      </div>
+      <div class="player-grid">
+        <section class="player-card" aria-label="Existing operatives">
+          <div class="player-card-title">EXISTING OPERATIVES</div>
+          <div class="player-list" id="playerList"></div>
+        </section>
+        <section class="player-card" aria-label="Open a new operative file">
+          <div class="player-card-title">OPEN A NEW FILE</div>
+          <div class="player-create">
+            <input id="playerName" class="player-input" type="text" maxlength="16" placeholder="Your agent name…" autocomplete="off" aria-label="Agent name">
+            <button class="player-create-btn" id="playerCreate" type="button">OPEN FILE</button>
+            <div class="player-msg" id="playerMsg" hidden></div>
+            <div class="player-suggest" id="playerSuggest"></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
 
   <main id="hubScreen" class="hub-screen">
     <section class="hero">
       <div>
         <div class="eyebrow">TRAINING DIVISION // FILE 07-B</div>
         <h1>Don't break in. Think in code.</h1>
-        <p>Take control of a field agent: write Python, plan a route, and retrieve the intel. 16 stages, one clear path — every few stages you learn a new tool, then practice it on the next operation.</p>
+        <p>Write Python to guide your agent through a guarded office: plan the route, dodge security, steal the intel. One new skill every five stages.</p>
       </div>
       <div class="rank-card">
         <div class="rank-head"><span>TRAINING PROGRESS</span><span id="xpCount">0 XP</span></div>
         <div class="rank-title" id="rankTitle">Agency Cadet</div>
         <div class="xp-line"><div class="xp-fill" id="xpFill"></div></div>
         <div class="xp-foot"><span id="xpNext">0 / 100</span><span>FIELD RANK</span></div>
+        <div class="rank-ladder" id="rankLadderView" aria-label="Agent ranks, low to high"></div>
       </div>
     </section>
 
@@ -434,7 +505,7 @@ body.stage-immersive{overflow:hidden}
       <span class="hub-legend-item"><b class="lg-lock">LOCKED</b>Clear the previous stage first</span>
     </div>
 
-    <section class="admin-panel" id="adminPanel" hidden aria-label="HQ admin console">
+    <section class="admin-panel" id="adminPanel" aria-label="HQ admin console">
       <div class="admin-head"><span class="admin-title">HQ ADMIN CONSOLE</span><span class="admin-sub">CLEARANCE CODE REQUIRED · ALL ACCESS IS LOGGED</span></div>
       <div class="admin-lock" id="adminLock">
         <div class="admin-lock-title">ENTER HQ CLEARANCE CODE</div>
@@ -457,7 +528,7 @@ body.stage-immersive{overflow:hidden}
     <section class="game-brief">
       <button class="back-btn" id="backToLevels">← STAGE SELECT</button>
       <div class="game-brief-content">
-        <div class="game-brief-meta"><span id="levelCount">MISSION 01 / 05</span><span class="mission-code" id="missionCode">OPERATION // 01</span><span class="mission-limit" id="missionLimit"></span><span class="mission-req" id="missionReq" hidden></span></div>
+        <div class="game-brief-meta"><span id="levelCount">MISSION 01 / 05</span><span class="mission-code" id="missionCode">OPERATION // 01</span><span class="mission-limit" id="missionLimit"></span><span class="mission-req" id="missionReq" hidden></span><button id="viewToggle" class="view-toggle" type="button" title="Switch between top-down (2D) and isometric (3D) view">VIEW: 2D</button></div>
         <div class="game-brief-main">
           <div class="game-brief-copy">
             <h1 class="mission-name" id="missionName">Data Pickup</h1>
@@ -504,7 +575,7 @@ body.stage-immersive{overflow:hidden}
         <div class="editor-bar"><span class="editor-filename"><i class="file-dot"></i>operation.py</span><span class="editor-mode">CPYTHON 3</span></div>
         <div class="editor-shell">
           <div class="line-numbers" id="lineNumbers">1</div>
-          <textarea id="codeEditor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Python code editor" aria-autocomplete="list" aria-controls="suggestionList" placeholder="# Character is agent (starts facing right)&#10;# Move: agent.step(3)&#10;# Pick up: agent.collect()" dir="ltr"></textarea>
+          <textarea id="codeEditor" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" aria-label="Python code editor" aria-autocomplete="list" aria-controls="suggestionList" placeholder="# Character is agent (starts facing right)&#10;# Move: agent.step(3)&#10;# Data chips are picked up automatically — just walk over them" dir="ltr"></textarea>
           <div class="autocomplete" id="autocomplete" hidden>
             <div class="autocomplete-head"><span>CODE COMPLETION</span><span>↑ ↓ · TAB TO ACCEPT</span></div>
             <div class="suggestion-list" id="suggestionList" role="listbox"></div>
@@ -534,6 +605,18 @@ body.stage-immersive{overflow:hidden}
     </div>
     <p class="lesson-body" id="lessonBody"></p>
     <button class="lesson-btn" id="lessonBtn" type="button">GOT IT — CONTINUE THE MISSION</button>
+  </div>
+</div>
+
+<div class="lesson-overlay" id="briefOverlay" hidden role="dialog" aria-modal="true">
+  <div class="lesson-card">
+    <div class="lesson-eyebrow">MISSION BRIEFING // STAGE OBJECTIVE</div>
+    <div class="lesson-head">
+      <div class="lesson-icon">◎</div>
+      <div><h3 class="lesson-title" id="briefTitle"></h3><div class="lesson-sub">READ BEFORE YOU DEPLOY</div></div>
+    </div>
+    <div class="lesson-body" id="briefBody"></div>
+    <button class="lesson-btn" id="briefBtn" type="button">DEPLOY AGENT →</button>
   </div>
 </div>
 
@@ -568,436 +651,455 @@ body.stage-immersive{overflow:hidden}
   const levels = [
     {
       id:1,title:'First Steps',short:'Step & collect',code:'MOVE-01',tag:'MOVEMENT',
-      desc:'Your first field op. A data case sits ahead in the corridor — walk to it, pick it up, and reach extraction.',
-      objective:'Collect the intel, then step onto EX.',cols:8,rows:5,lines:4,start:{x:1,y:2},exit:{x:6,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:2,label:'Intel case'}],
-      note:'Skill 1 of 12 — MOVEMENT: agent.step(n) walks forward n tiles; agent.collect() picks up an item. Count the tiles between agent and the case before you choose the number.'
+      desc:'First field op: a data case waits ahead. Walk to it, then to the exit.',
+      objective:'Reach the intel case, then step onto EX.',cols:8,rows:5,lines:3,start:{x:1,y:2},exit:{x:6,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:2,label:'Data chip'},{type:'intel',x:4,y:2,label:'Data chip'}],
+      note:'Skill 1 of 12 — MOVEMENT: agent.step(n) walks n tiles forward. Chips are picked up automatically when you walk over them.'
     },
     {
       id:2,title:'Longer Route',short:'Count your steps',code:'MOVE-02',tag:'MOVEMENT',
-      desc:'Same corridor, longer walk. Count the tiles carefully — one step command can cover many tiles.',
-      objective:'Reach the intel, collect it, and continue to the exit.',cols:10,rows:5,lines:4,start:{x:1,y:2},exit:{x:8,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:5,y:2,label:'Intel case'}],
-      note:'Practice: agent.step(n) takes any number of tiles. Count before you code: from the agent to the case, then from the case to EX.'
+      desc:'Longer corridor, same skill. Count the tiles before you code.',
+      objective:'Reach the intel, collect it, and continue to EX.',cols:10,rows:5,lines:3,start:{x:1,y:2},exit:{x:8,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:2,label:'Data chip'},{type:'intel',x:6,y:2,label:'Data chip'}],
+      note:'Practice: agent.step(n) takes any number — one command can cover many tiles.'
     },
     {
       id:3,title:'Twin Pickup',short:'Two cases',code:'MOVE-03',tag:'MOVEMENT',
-      desc:'Two intel cases were dropped in the same corridor. Grab both on your way to extraction.',
-      objective:'Collect both intel cases, then reach EX.',cols:11,rows:5,lines:6,start:{x:1,y:2},exit:{x:9,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:2,label:'Intel case'},{type:'intel',x:7,y:2,label:'Intel case'}],
-      note:'Practice: stop on each case and run agent.collect() — one collect per case. Count the gap between the two cases separately.'
+      desc:'Two cases were dropped in the same corridor. Grab both on your way.',
+      objective:'Collect both intel cases, then reach EX.',cols:11,rows:5,lines:4,start:{x:1,y:2},exit:{x:9,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:2,label:'Data chip'},{type:'intel',x:6,y:2,label:'Data chip'}],
+      note:'Practice: chips are picked up on contact — plan one route across both.'
     },
     {
       id:4,title:'The Long Hall',short:'Big numbers',code:'MOVE-04',tag:'MOVEMENT',
-      desc:'The longest hall in the training wing. A single agent.step() can carry you across most of it.',
-      objective:'Collect the intel and reach extraction.',cols:12,rows:5,lines:4,start:{x:1,y:2},exit:{x:10,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:6,y:2,label:'Intel case'}],
-      note:'Practice: bigger numbers in agent.step(n) mean fewer commands. Efficiency already matters for the action star.'
+      desc:'The longest hall in the training wing. One big step covers most of it.',
+      objective:'Collect the intel and reach extraction.',cols:12,rows:5,lines:3,start:{x:1,y:2},exit:{x:10,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:2,label:'Data chip'},{type:'intel',x:7,y:2,label:'Data chip'}],
+      note:'Practice: bigger step numbers mean fewer commands — and fewer actions earn a better rating.'
     },
     {
       id:5,title:'Movement Mastery',short:'Final drill',code:'MOVE-05',tag:'MOVEMENT',
-      desc:'Movement exam: two cases, one long corridor, and a tight action budget. Show HQ you have mastered walking and collecting.',
-      objective:'Collect both intel cases and extract with actions to spare.',cols:13,rows:5,lines:6,start:{x:1,y:2},exit:{x:11,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:4,y:2,label:'Intel case'},{type:'intel',x:10,y:2,label:'Intel case'}],
-      note:'Mastery drill: movement only. Count every gap once, write the three walks and two collects, and you are done. From Stage 6 you will learn to turn.'
+      desc:'Movement exam: two cases, one long corridor, a tight action budget.',
+      objective:'Collect both intel cases and extract with actions to spare.',cols:13,rows:5,lines:4,start:{x:1,y:2},exit:{x:11,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:5,y:2,label:'Data chip'},{type:'intel',x:8,y:2,label:'Data chip'}],
+      note:'Mastery drill: movement only. Count every gap once and string the walks together. From Stage 6 you learn to turn.'
     },
     {
       id:6,title:'First Turn',short:'Turn & face',code:'TURN-06',tag:'TURNING',
-      desc:'The exit is around a corner. Walking straight is no longer enough — it is time to learn turning.',
-      objective:'Collect the package, turn toward the exit, and extract.',cols:8,rows:7,lines:7,start:{x:1,y:4},exit:{x:6,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:4,label:'Intel case'}],
-      note:'Skill 2 of 12 — TURNING: agent.turn("left") and agent.turn("right") rotate the agent 90 degrees in place. Turn first, then step — the arrow shows where the agent will walk.'
+      desc:'The exit is around a corner — walking straight is no longer enough.',
+      objective:'Collect the package, turn toward the exit, and extract.',cols:8,rows:7,lines:6,start:{x:1,y:4},exit:{x:6,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:2,label:'Data chip'}],
+      note:'Skill 2 of 12 — TURNING: agent.turn("left") / ("right") rotates the agent 90 degrees in place. Turn first, then step.'
     },
     {
       id:7,title:'Two Corners',short:'Double turn',code:'TURN-07',tag:'TURNING',
-      desc:'Two corners guard this route. Plan both turns before the agent takes a single step.',
-      objective:'Collect the intel and walk the L-route to EX.',cols:9,rows:6,lines:7,start:{x:1,y:1},exit:{x:2,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:6,y:1,label:'Intel case'}],
-      note:'Practice: each corner is one turn plus one walk. Right turns go clockwise, left turns counter-clockwise — watch the arrow.'
+      desc:'Two corners guard this route. Plan both turns before the first step.',
+      objective:'Collect the intel and walk the L-route to EX.',cols:9,rows:6,lines:6,start:{x:1,y:1},exit:{x:2,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:5,y:1,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Practice: each corner is one turn plus one walk. The arrow shows where the agent will go.'
     },
     {
       id:8,title:'The Square',short:'Full loop',code:'TURN-08',tag:'TURNING',
-      desc:'Walk the perimeter of a square and come home. Three right turns bring you back to where you started — with the intel.',
-      objective:'Collect the intel and return to the start tile, which is also EX.',cols:8,rows:6,lines:9,start:{x:1,y:1},exit:{x:1,y:4},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:6,y:1,label:'Intel case'}],
-      note:'Practice: four sides, three turns. The extraction point is the tile you started on, so the route is a closed loop.'
+      desc:'Walk the square and come home — the start tile is also the exit.',
+      objective:'Collect the intel and return to the start tile, which is also EX.',cols:8,rows:6,lines:8,start:{x:1,y:1},exit:{x:1,y:4},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:6,y:1,label:'Data chip'},{type:'intel',x:5,y:4,label:'Data chip'}],
+      note:'Practice: four sides, three turns. The route is a closed loop.'
     },
     {
       id:9,title:'Zigzag Stairs',short:'Climb the steps',code:'TURN-09',tag:'TURNING',
-      desc:'A staircase route to the roof exit. Alternate turns build the zigzag — no loops yet, just clean turning.',
-      objective:'Zigzag up to the intel and extract.',cols:10,rows:7,lines:15,start:{x:1,y:5},exit:{x:8,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:7,y:2,label:'Intel case'}],
-      note:'Practice: the pattern is step-step, turn left, step, turn right — repeated by hand. In Chapter 3 you will automate exactly this pattern.'
+      desc:'A zigzag staircase to the roof exit. Alternate turns build the climb.',
+      objective:'Zigzag up to the intel and extract.',cols:10,rows:7,lines:14,start:{x:1,y:5},exit:{x:8,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:4,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Practice: step-step, turn left, step, turn right — repeated by hand. Chapter 3 automates exactly this.'
     },
     {
       id:10,title:'Turning Mastery',short:'Six-corner op',code:'TURN-10',tag:'TURNING',
-      desc:'Turning exam: two cases on a winding route. Every tile of this one is earned with turns.',
-      objective:'Collect both intel cases and extract.',cols:11,rows:6,lines:12,start:{x:1,y:3},exit:{x:9,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:1,label:'Intel case'},{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Mastery drill: turning. Trace the whole route on the map first — write down each walk and each turn before coding. From Stage 11 you will learn loops.'
+      desc:'Turning exam: two cases on a winding route. Every tile is earned with turns.',
+      objective:'Collect both intel cases and extract.',cols:11,rows:6,lines:10,start:{x:1,y:3},exit:{x:9,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:1,label:'Data chip'},{type:'intel',x:7,y:1,label:'Data chip'}],
+      note:'Mastery drill: turning. Trace the whole route before coding. From Stage 11 you learn loops.'
     },
     {
       id:11,title:'Chain Pickup',short:'First loop',code:'LOOP-11',tag:'LOOPS',
-      desc:'Three cases, evenly spaced. Writing every step by hand works — but HQ will not accept it: this op must run a loop.',
-      objective:'Use a for loop to collect all three cases, then extract.',cols:11,rows:5,lines:5,start:{x:1,y:2},exit:{x:9,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:2,label:'Intel case'},{type:'intel',x:5,y:2,label:'Intel case'},{type:'intel',x:7,y:2,label:'Intel case'}],
-      note:'Skill 3 of 12 — LOOPS: for i in range(n): repeats the indented commands n times. HQ REQUIREMENT: your program must contain a for loop — hand-walked code is rejected here.',req:'A FOR LOOP'
+      desc:'Three cases in a row. Hand-walked code will not fly here — HQ demands a loop.',
+      objective:'Use a for loop to collect all three cases, then extract.',cols:11,rows:5,lines:4,start:{x:1,y:2},exit:{x:9,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:2,label:'Data chip'},{type:'intel',x:5,y:2,label:'Data chip'},{type:'intel',x:7,y:2,label:'Data chip'}],
+      note:'Skill 3 of 12 — LOOPS: for i in range(n): repeats the indented commands n times. HQ REQUIREMENT: your program must contain a for loop.',req:'A FOR LOOP'
     },
     {
       id:12,title:'Staircase Loop',short:'Looped zigzag',code:'LOOP-12',tag:'LOOPS',
-      desc:'The zigzag from Stage 9, longer. This time the repeating pattern belongs inside a loop — HQ requires one.',
+      desc:'The zigzag returns, longer — this time the pattern belongs in a loop.',
       objective:'Use one loop to climb the stairs to EX.',cols:10,rows:7,lines:7,start:{x:1,y:5},exit:{x:8,y:2},walls:[],doors:[],cameras:[],
-      items:[],
-      note:'Practice: put the whole repeating pattern — steps and turns — inside one for loop. The indented block runs once per count of range(3).',req:'A FOR LOOP'
+      items:[{type:'intel',x:3,y:4,label:'Data chip'},{type:'intel',x:5,y:4,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Practice: steps and turns inside one for loop — the block runs once per count of range(3).',req:'A FOR LOOP'
     },
     {
       id:13,title:'Supply Chain',short:'Pickup line',code:'LOOP-13',tag:'LOOPS',
-      desc:'A supply line runs down the corridor with a case every two tiles, then climbs a tower to the roof exit.',
-      objective:'Loop along the pickup line, turn, and loop up the tower.',cols:9,rows:7,lines:7,start:{x:1,y:5},exit:{x:7,y:1},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:5,label:'Intel case'},{type:'intel',x:5,y:5,label:'Intel case'},{type:'intel',x:7,y:5,label:'Intel case'}],
-      note:'Practice: agent.step(n) cannot help here — there is a case every two tiles, so the pattern is step(2), collect, repeated. One loop per straight run.',req:'A FOR LOOP'
+      desc:'A supply line with a case every two tiles, then a tower climb to the roof.',
+      objective:'Loop along the pickup line, turn, and loop up the tower.',cols:9,rows:7,lines:6,start:{x:1,y:5},exit:{x:7,y:1},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:5,label:'Data chip'},{type:'intel',x:6,y:5,label:'Data chip'},{type:'intel',x:7,y:4,label:'Data chip'}],
+      note:'Practice: a case every two tiles means step(2), collect, repeated. One loop per straight run.',req:'A FOR LOOP'
     },
     {
       id:14,title:'Guard Patrol',short:'Square patrol',code:'LOOP-14',tag:'LOOPS',
-      desc:'Patrol the perimeter of the compound, collecting intel at every corner, and return to base. One loop does the whole rounds.',
-      objective:'Use a loop to patrol all four sides and extract where you started.',cols:6,rows:6,lines:5,start:{x:1,y:1},exit:{x:1,y:1},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:4,y:1,label:'Intel case'},{type:'intel',x:4,y:4,label:'Intel case'},{type:'intel',x:1,y:4,label:'Intel case'}],
-      note:'Practice: the same three commands repeat on every side of the square — step, collect, turn right. Perfect loop material.',req:'A FOR LOOP'
+      desc:'Patrol the compound perimeter, collecting at every corner, and return to base.',
+      objective:'Use a loop to patrol all four sides and extract where you started.',cols:6,rows:6,lines:4,start:{x:1,y:1},exit:{x:1,y:1},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:1,label:'Data chip'},{type:'intel',x:4,y:4,label:'Data chip'},{type:'intel',x:1,y:4,label:'Data chip'}],
+      note:'Practice: step, collect, turn right — the same three commands repeat on every side.',req:'A FOR LOOP'
     },
     {
       id:15,title:'Loop Mastery',short:'Supply run',code:'LOOP-15',tag:'LOOPS',
-      desc:'Loop exam: a supply line climbs the ridge with a case waiting at every switchback.',
-      objective:'One loop collects every case on the climb. Extract at the top.',cols:12,rows:8,lines:8,start:{x:1,y:6},exit:{x:10,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:6,label:'Intel case'},{type:'intel',x:5,y:5,label:'Intel case'},{type:'intel',x:7,y:4,label:'Intel case'},{type:'intel',x:9,y:3,label:'Intel case'}],
-      note:'Mastery drill: loops. The climb repeats the same five commands four times — write them once, indented, under range(4). From Stage 16 your agent learns to make decisions with if.',req:'A FOR LOOP'
+      desc:'Loop exam: a case waits at every switchback of the climb.',
+      objective:'One loop collects every case on the climb. Extract at the top.',cols:12,rows:8,lines:7,start:{x:1,y:6},exit:{x:10,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:5,label:'Data chip'},{type:'intel',x:6,y:4,label:'Data chip'},{type:'intel',x:8,y:3,label:'Data chip'}],
+      note:'Mastery drill: loops. Five commands repeat four times under range(4). From Stage 16 your agent learns if.',req:'A FOR LOOP'
     },
     {
       id:16,title:'Check the Wall',short:'First if',code:'DECI-16',tag:'DECISIONS',
-      desc:'Two walls block this corridor at different points. Instead of memorizing detours, let the agent check ahead and decide.',
-      objective:'Loop down the corridor and use if + agent.wall_ahead() to detour each wall.',cols:13,rows:7,lines:14,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:4,y:3},{x:8,y:3}],doors:[],cameras:[],
-      items:[{type:'intel',x:10,y:3,label:'Intel case'}],
-      note:'Skill 4 of 12 — DECISIONS: if runs the indented commands only when its condition is true. agent.wall_ahead() reports whether the next tile is blocked. HQ REQUIREMENT: your program must contain an if check.',req:'AN IF CHECK'
+      desc:'Walls block this corridor. Do not memorize detours — check ahead and decide.',
+      objective:'Loop down the corridor and use if + agent.wall_ahead() to detour each wall.',cols:13,rows:7,lines:13,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:4,y:3},{x:8,y:3}],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:2,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'},{type:'intel',x:8,y:2,label:'Data chip'}],
+      note:'Skill 4 of 12 — DECISIONS: if runs its block only when the condition is true. wall_ahead() reports the tile ahead. HQ REQUIREMENT: your program must contain an if check.',req:'AN IF CHECK'
     },
     {
-      id:17,title:'Fork Logic',short:'if / else',code:'DECI-17',tag:'DECISIONS',
-      desc:'A wall may block the lane ahead — or it may not. Write both plans and let the agent pick the right one at runtime.',
-      objective:'Check the lane with if / else and take whichever side is clear.',cols:10,rows:6,lines:11,start:{x:1,y:2},exit:{x:8,y:4},walls:[{x:4,y:2}],doors:[],cameras:[],
-      items:[{type:'intel',x:7,y:4,label:'Intel case'}],
-      note:'Practice: else holds the plan for when the condition is false. Only one branch ever runs — but a good agent writes both.',req:'AN IF CHECK'
+      id:17,title:'Fork Logic',short:'Just if',code:'DECI-17',tag:'DECISIONS',
+      desc:'The lane may be blocked. Check before you walk — and detour only if you must.',
+      objective:'Check the lane with if; when a wall is ahead, detour around it to EX.',cols:10,rows:6,lines:8,start:{x:1,y:2},exit:{x:8,y:4},walls:[{x:4,y:2}],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:4,label:'Data chip'},{type:'intel',x:6,y:4,label:'Data chip'}],
+      note:'Practice: if + wall_ahead() again — the detour runs only when the condition is true. Reuse the up-over-down pattern from Stage 16.',req:'AN IF CHECK'
     },
     {
       id:18,title:'Sensor Sweep',short:'Loop + if',code:'DECI-18',tag:'DECISIONS',
-      desc:'Two walls hide in one corridor. The loop does the walking; the if reacts to whatever it finds.',
-      objective:'Combine one loop and an if check to sweep past both walls.',cols:12,rows:6,lines:15,start:{x:1,y:3},exit:{x:10,y:3},walls:[{x:4,y:3},{x:7,y:3}],doors:[],cameras:[],
-      items:[{type:'intel',x:9,y:3,label:'Intel case'}],
-      note:'Practice: loops and decisions work together — the loop walks a fixed number of tiles, the if handles the surprise. The same if serves both walls.',req:'AN IF CHECK'
+      desc:'Two walls hide in one corridor. The loop walks; the if reacts.',
+      objective:'Combine one loop and an if check to sweep past both walls.',cols:12,rows:6,lines:14,start:{x:1,y:3},exit:{x:10,y:3},walls:[{x:4,y:3},{x:7,y:3}],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:2,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'},{type:'intel',x:8,y:2,label:'Data chip'}],
+      note:'Practice: the loop walks the fixed stretch, the if handles the surprise. One if serves both walls.',req:'AN IF CHECK'
     },
     {
       id:19,title:'Double Detour',short:'Two checks',code:'DECI-19',tag:'DECISIONS',
-      desc:'Two walls, two intel cases, two decisions. Not every mission fits a loop — sometimes you check, detour, and collect by hand.',
-      objective:'Use two separate if checks to weave past both walls and grab both cases.',cols:13,rows:6,lines:24,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:4,y:3},{x:8,y:3}],doors:[],cameras:[],
-      items:[{type:'intel',x:6,y:3,label:'Intel case'},{type:'intel',x:10,y:3,label:'Intel case'}],
-      note:'Practice: reuse the detour pattern — check, go over, come back down. This route is irregular, so two hand-written if checks beat one loop.',req:'AN IF CHECK'
+      desc:'Two walls, two decisions — and no loop fits this irregular route.',
+      objective:'Use two separate if checks to weave past both walls.',cols:13,rows:6,lines:22,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:4,y:3},{x:8,y:3}],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:2,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'},{type:'intel',x:8,y:2,label:'Data chip'}],
+      note:'Practice: reuse the up-over-down detour. Two hand-written if checks beat a forced loop here.',req:'AN IF CHECK'
     },
     {
       id:20,title:'If Mastery',short:'The gauntlet',code:'DECI-20',tag:'DECISIONS',
-      desc:'Decision exam: three walls guard the gauntlet. One loop with an if inside clears all three.',
-      objective:'Loop down the corridor and detour every wall you detect.',cols:14,rows:6,lines:14,start:{x:1,y:4},exit:{x:12,y:4},walls:[{x:3,y:4},{x:6,y:4},{x:9,y:4}],doors:[],cameras:[],
-      items:[{type:'intel',x:11,y:4,label:'Intel case'}],
-      note:'Mastery drill: if checks. One loop, one if, three walls — the same two lines of thinking handle every obstacle. From Stage 21 locked doors join the campaign.',req:'AN IF CHECK'
+      desc:'Decision exam: three walls guard the gauntlet.',
+      objective:'Loop down the corridor and detour every wall you detect.',cols:14,rows:6,lines:13,start:{x:1,y:4},exit:{x:12,y:4},walls:[{x:3,y:4},{x:6,y:4},{x:9,y:4}],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:4,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'},{type:'intel',x:9,y:3,label:'Data chip'}],
+      note:'Mastery drill: if checks. One loop, one if, three walls. From Stage 21 locked doors join the campaign.',req:'AN IF CHECK'
     },
     {
       id:21,title:'Keycard Entry',short:'First door',code:'ACCE-21',tag:'ACCESS',
-      desc:'A locked door seals the corridor. Find the access badge, then open the way the professional way.',
-      objective:'Collect the badge, open the door, take the intel, extract.',cols:9,rows:5,lines:8,start:{x:1,y:2},exit:{x:7,y:2},walls:[],doors:[{id:'vault',x:4,y:2}],cameras:[],
-      items:[{type:'badge',x:2,y:2,label:'Access badge'},{type:'intel',x:6,y:2,label:'Intel case'}],
-      note:'Skill 5 of 12 — KEYS & DOORS: agent.interact() opens a locked door when you hold its badge and stand beside it. The door physically blocks the route — there is no way around.'
+      desc:'A locked door seals the corridor. Find the badge and open it the professional way.',
+      objective:'Collect the badge, open the door, take the intel, extract.',cols:9,rows:5,lines:6,start:{x:1,y:2},exit:{x:7,y:2},walls:[],doors:[{id:'vault',x:4,y:2}],cameras:[],
+      items:[{type:'intel',x:3,y:2,label:'Data chip'},{type:'intel',x:5,y:2,label:'Data chip'},{type:'intel',x:6,y:2,label:'Data chip'},{type:'badge',x:2,y:2,label:'Access badge'}],
+      note:'Skill 5 of 12 — KEYS & DOORS: agent.interact() opens a locked door when you hold its badge and stand beside it. There is no way around.'
     },
     {
       id:22,title:'Double Gate',short:'Two locks',code:'ACCE-22',tag:'ACCESS',
-      desc:'One badge, two gates. The same interact command works on every lock you hold the key for.',
-      objective:'Open both gates and retrieve the intel.',cols:12,rows:5,lines:10,start:{x:1,y:2},exit:{x:10,y:2},walls:[],doors:[{id:'vault1',x:4,y:2},{id:'vault2',x:7,y:2}],cameras:[],
-      items:[{type:'badge',x:2,y:2,label:'Access badge'},{type:'intel',x:9,y:2,label:'Intel case'}],
-      note:'Practice: agent.interact() opens whichever locked door you are standing beside — one badge is enough for both.'
+      desc:'One badge, two gates. The same command opens every lock you hold the key for.',
+      objective:'Open both gates and retrieve the intel.',cols:12,rows:5,lines:8,start:{x:1,y:2},exit:{x:10,y:2},walls:[],doors:[{id:'vault1',x:4,y:2},{id:'vault2',x:7,y:2}],cameras:[],
+      items:[{type:'intel',x:3,y:2,label:'Data chip'},{type:'intel',x:6,y:2,label:'Data chip'},{type:'intel',x:8,y:2,label:'Data chip'},{type:'badge',x:2,y:2,label:'Access badge'}],
+      note:'Practice: interact() opens whichever locked door you stand beside — one badge is enough for both.'
     },
     {
       id:23,title:'Key Detour',short:'Badge off-route',code:'ACCE-23',tag:'ACCESS',
-      desc:'The badge is not on the main corridor this time — fetch it around the corner, then come back for the door.',
-      objective:'Detour for the badge, open the door, extract.',cols:10,rows:7,lines:14,start:{x:1,y:3},exit:{x:8,y:3},walls:[],doors:[{id:'gate',x:5,y:3}],cameras:[],
-      items:[{type:'badge',x:3,y:1,label:'Access badge'},{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Practice: doors and turns together. Plan the whole route before you run: badge first, then the door.'
+      desc:'The badge is around the corner this time. Fetch it, then come back for the door.',
+      objective:'Detour for the badge, open the door, extract.',cols:10,rows:7,lines:12,start:{x:1,y:3},exit:{x:8,y:3},walls:[],doors:[{id:'gate',x:5,y:3}],cameras:[],
+      items:[{type:'intel',x:3,y:2,label:'Data chip'},{type:'intel',x:4,y:1,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'badge',x:3,y:1,label:'Access badge'}],
+      note:'Practice: doors and turns together. Plan the whole route first: badge, then door.'
     },
     {
       id:24,title:'Guarded Door',short:'Door + wall',code:'ACCE-24',tag:'ACCESS',
-      desc:'A door and a wall share this corridor. Open the lock, then detour the wall — skills stack now.',
-      objective:'Open the door, detour the wall, take the intel.',cols:11,rows:6,lines:16,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:6,y:3}],doors:[{id:'gate',x:4,y:3}],cameras:[],
-      items:[{type:'badge',x:2,y:3,label:'Access badge'},{type:'intel',x:8,y:3,label:'Intel case'}],
-      note:'Practice: badge first, door second, wall third. The wall detour is the same up-over-down pattern from Chapter 4.'
+      desc:'A door and a wall share this corridor. Skills stack now.',
+      objective:'Open the door, detour the wall, take the intel.',cols:11,rows:6,lines:14,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:6,y:3}],doors:[{id:'gate',x:4,y:3}],cameras:[],
+      items:[{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:2,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'},{type:'badge',x:2,y:3,label:'Access badge'}],
+      note:'Practice: badge first, door second, wall third — the detour is the same up-over-down pattern.'
     },
     {
       id:25,title:'Door Mastery',short:'Two floors',code:'ACCE-25',tag:'ACCESS',
-      desc:'Door exam: two floors, two locked doors, two cases. Every tool from Chapters 1–5 is on the table.',
-      objective:'Open both doors, collect both cases, extract.',cols:12,rows:7,lines:15,start:{x:1,y:5},exit:{x:10,y:2},walls:[],doors:[{id:'gate1',x:4,y:5},{id:'gate2',x:8,y:2}],cameras:[],
-      items:[{type:'badge',x:2,y:5,label:'Access badge'},{type:'intel',x:6,y:5,label:'Intel case'},{type:'intel',x:9,y:2,label:'Intel case'}],
-      note:'Mastery drill: doors. Trace the route floor by floor before coding. From Stage 26 the building starts watching back.'
+      desc:'Door exam: two floors, two locked doors, two cases. Everything so far is in play.',
+      objective:'Open both doors, collect both cases, extract.',cols:12,rows:7,lines:12,start:{x:1,y:5},exit:{x:10,y:2},walls:[],doors:[{id:'gate1',x:4,y:5},{id:'gate2',x:8,y:2}],cameras:[],
+      items:[{type:'intel',x:5,y:5,label:'Data chip'},{type:'intel',x:6,y:4,label:'Data chip'},{type:'intel',x:6,y:2,label:'Data chip'},{type:'badge',x:2,y:5,label:'Access badge'}],
+      note:'Mastery drill: doors. Trace the route floor by floor before coding. From Stage 26 the building watches back.'
     },
     {
       id:26,title:'Camera Watch',short:'First camera',code:'STEA-26',tag:'STEALTH',
-      desc:'A security camera seals the only gate in this corridor. Step onto the watched tile while it is live and the alarm ends the run.',
-      objective:'Detect the camera, disable it, then cross through the gate.',cols:9,rows:7,lines:7,start:{x:1,y:3},exit:{x:7,y:3},walls:[{x:4,y:1},{x:4,y:2},{x:4,y:4},{x:4,y:5}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]}],
-      items:[{type:'intel',x:6,y:3,label:'Intel case'}],
-      note:'Skill 6 of 12 — CAMERAS: the camera watches the red tile — the only way through. agent.camera_ahead() reports a live camera on the tile ahead; agent.disable_camera() switches it off when you stand beside it.'
+      desc:'A security camera seals the only gate. Step onto the watched tile while it is live and the run ends.',
+      objective:'Detect the camera, disable it, then cross through the gate.',cols:9,rows:7,lines:6,start:{x:1,y:3},exit:{x:7,y:3},walls:[{x:4,y:1},{x:4,y:2},{x:4,y:4},{x:4,y:5}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Skill 6 of 12 — CAMERAS: camera_ahead() reports a live camera on the next tile; disable_camera() switches it off when you stand beside it.'
     },
     {
       id:27,title:'Two Watchful Eyes',short:'Two gates',code:'STEA-27',tag:'STEALTH',
-      desc:'Two cameras seal two gates, one after the other. The routine you learned now runs twice — a loop runs it for you.',
-      objective:'Loop through both camera gates, collect the intel, extract.',cols:11,rows:7,lines:8,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:4,y:1},{x:4,y:2},{x:4,y:4},{x:4,y:5},{x:7,y:1},{x:7,y:2},{x:7,y:4},{x:7,y:5}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]},{id:'cam2',x:7,y:3,dir:'down',danger:[{x:7,y:3}]}],
-      items:[{type:'intel',x:8,y:3,label:'Intel case'}],
-      note:'Practice: the same disable routine, repeated for each gate. Stand beside the camera, disable, then walk through.'
+      desc:'Two camera gates, one after the other. A loop runs the routine twice.',
+      objective:'Loop through both camera gates, collect the intel, extract.',cols:11,rows:7,lines:7,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:4,y:1},{x:4,y:2},{x:4,y:4},{x:4,y:5},{x:7,y:1},{x:7,y:2},{x:7,y:4},{x:7,y:5}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]},{id:'cam2',x:7,y:3,dir:'down',danger:[{x:7,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Practice: stand beside the camera, disable, walk through — repeated for each gate.'
     },
     {
       id:28,title:'Camera Corner',short:'Camera + turns',code:'STEA-28',tag:'STEALTH',
-      desc:'The camera seals the gate right before the corner. Disable it, take the case, and swing down to extraction.',
-      objective:'Disable the camera, cross the gate, collect, and turn the corner to EX.',cols:10,rows:7,lines:7,start:{x:1,y:3},exit:{x:7,y:5},walls:[{x:5,y:1},{x:5,y:2},{x:5,y:4},{x:5,y:5}],doors:[],cameras:[{id:'cam1',x:5,y:3,dir:'down',danger:[{x:5,y:3}]}],
-      items:[{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Practice: cameras plus turning. Disable from the tile beside the gate, cross, then mind your turns.'
+      desc:'The camera seals the gate right before the corner.',
+      objective:'Disable the camera, cross the gate, collect, and turn the corner to EX.',cols:10,rows:7,lines:6,start:{x:1,y:3},exit:{x:7,y:5},walls:[{x:5,y:1},{x:5,y:2},{x:5,y:4},{x:5,y:5}],doors:[],cameras:[{id:'cam1',x:5,y:3,dir:'down',danger:[{x:5,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'}],
+      note:'Practice: cameras plus turning. Disable from the tile beside the gate, then mind your turns.'
     },
     {
       id:29,title:'Guarded Gate',short:'Camera + door',code:'STEA-29',tag:'STEALTH',
-      desc:'A locked door, then a camera gate right behind it. Open first, silence second, then move.',
-      objective:'Open the door, disable the camera, take the intel.',cols:11,rows:6,lines:10,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:6,y:1},{x:6,y:2},{x:6,y:4}],doors:[{id:'gate',x:4,y:3}],cameras:[{id:'cam1',x:6,y:3,dir:'down',danger:[{x:6,y:3}]}],
-      items:[{type:'badge',x:2,y:3,label:'Access badge'},{type:'intel',x:8,y:3,label:'Intel case'}],
-      note:'Practice: doors and cameras together — order matters. You cannot reach the camera until the door is open.'
+      desc:'A locked door, then a camera gate right behind it. Order matters.',
+      objective:'Open the door, disable the camera, take the intel.',cols:11,rows:6,lines:8,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:6,y:1},{x:6,y:2},{x:6,y:4}],doors:[{id:'gate',x:4,y:3}],cameras:[{id:'cam1',x:6,y:3,dir:'down',danger:[{x:6,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'},{type:'badge',x:2,y:3,label:'Access badge'}],
+      note:'Practice: doors and cameras together — you cannot reach the camera until the door is open.'
     },
     {
       id:30,title:'Camera Mastery',short:'Three gates',code:'STEA-30',tag:'STEALTH',
-      desc:'Camera exam: three live cameras seal the whole corridor. One loop can disarm all three gates.',
-      objective:'Use a loop to disable every camera, collect, and extract.',cols:14,rows:6,lines:7,start:{x:1,y:3},exit:{x:12,y:3},walls:[{x:3,y:1},{x:3,y:2},{x:3,y:4},{x:6,y:1},{x:6,y:2},{x:6,y:4},{x:9,y:1},{x:9,y:2},{x:9,y:4}],doors:[],cameras:[{id:'cam1',x:3,y:3,dir:'down',danger:[{x:3,y:3}]},{id:'cam2',x:6,y:3,dir:'down',danger:[{x:6,y:3}]},{id:'cam3',x:9,y:3,dir:'down',danger:[{x:9,y:3}]}],
-      items:[{type:'intel',x:11,y:3,label:'Intel case'}],
-      note:'Mastery drill: cameras. Each gate is identical — step up beside it, disable, walk through. That is one loop body, repeated three times. From Stage 31 you learn the last skill — functions.'
+      desc:'Camera exam: three live cameras seal the whole corridor.',
+      objective:'Use a loop to disable every camera, collect, and extract.',cols:14,rows:6,lines:6,start:{x:1,y:3},exit:{x:12,y:3},walls:[{x:3,y:1},{x:3,y:2},{x:3,y:4},{x:6,y:1},{x:6,y:2},{x:6,y:4},{x:9,y:1},{x:9,y:2},{x:9,y:4}],doors:[],cameras:[{id:'cam1',x:3,y:3,dir:'down',danger:[{x:3,y:3}]},{id:'cam2',x:6,y:3,dir:'down',danger:[{x:6,y:3}]},{id:'cam3',x:9,y:3,dir:'down',danger:[{x:9,y:3}]}],
+      items:[{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'},{type:'intel',x:10,y:3,label:'Data chip'}],
+      note:'Mastery drill: cameras. Step up, disable, walk through — one loop body, three times. From Stage 31 you learn functions.'
     },
     {
       id:31,title:'Write a Function',short:'First def',code:'FIEL-31',tag:'FIELD TEST',
-      desc:'The final skill: package a maneuver into a named function and call it whenever you need it.',
-      objective:'Define climb(), call it twice, collect, and extract.',cols:9,rows:6,lines:10,start:{x:1,y:4},exit:{x:7,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:5,y:2,label:'Intel case'}],
+      desc:'The final new skill: package a maneuver into a function and call it by name.',
+      objective:'Define climb(), call it twice, collect, and extract.',cols:9,rows:6,lines:9,start:{x:1,y:4},exit:{x:7,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:4,label:'Data chip'},{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:5,y:2,label:'Data chip'}],
       note:'Skill 7 of 12 — FUNCTIONS: def name(): defines a reusable block; call it by name. HQ REQUIREMENT: your program must define a function with def.',req:'A DEF FUNCTION'
     },
     {
       id:32,title:'Reusable Routine',short:'Hop chain',code:'FIEL-32',tag:'FIELD TEST',
       desc:'Define the hop once, call it five times. This is what functions are for.',
-      objective:'Use a hop() function to collect all five cases.',cols:14,rows:5,lines:10,start:{x:1,y:2},exit:{x:12,y:2},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:2,label:'Intel case'},{type:'intel',x:5,y:2,label:'Intel case'},{type:'intel',x:7,y:2,label:'Intel case'},{type:'intel',x:9,y:2,label:'Intel case'},{type:'intel',x:11,y:2,label:'Intel case'}],
-      note:'Practice: define once, call many times — each call runs the whole block. Five cases, one function.',req:'A DEF FUNCTION'
+      objective:'Use a hop() function to collect all five cases.',cols:14,rows:5,lines:9,start:{x:1,y:2},exit:{x:12,y:2},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:2,label:'Data chip'},{type:'intel',x:6,y:2,label:'Data chip'},{type:'intel',x:8,y:2,label:'Data chip'},{type:'intel',x:10,y:2,label:'Data chip'}],
+      note:'Practice: define once, call many times — each call runs the whole block.',req:'A DEF FUNCTION'
     },
     {
       id:33,title:'Function Toolkit',short:'Function + loop',code:'FIEL-33',tag:'FIELD TEST',
       desc:'A function with a loop inside, called from another loop. Small code, big route.',
-      objective:'Build run(n) and patrol the square with two nested repeats.',cols:6,rows:6,lines:8,start:{x:1,y:1},exit:{x:1,y:1},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:4,y:1,label:'Intel case'},{type:'intel',x:4,y:4,label:'Intel case'},{type:'intel',x:1,y:4,label:'Intel case'}],
-      note:'Practice: functions and loops compose — the outer loop drives the sides, the function walks each one. Functions can even take a number as input.',req:'A DEF FUNCTION'
+      objective:'Build run(n) and patrol the square with two nested repeats.',cols:6,rows:6,lines:7,start:{x:1,y:1},exit:{x:1,y:1},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:1,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:3,y:4,label:'Data chip'},{type:'intel',x:1,y:4,label:'Data chip'}],
+      note:'Practice: functions and loops compose — and a function can take a number as input.',req:'A DEF FUNCTION'
     },
     {
       id:34,title:'Full Toolkit',short:'Every tool',code:'FINA-34',tag:'FINALE',
-      desc:'Badge, door, wall, and a sealed camera gate — every obstacle in one corridor. Write a detour() function and keep your plan readable.',
-      objective:'Open the door, detour the wall, disable the camera gate, extract.',cols:12,rows:6,lines:19,start:{x:1,y:3},exit:{x:10,y:3},walls:[{x:6,y:3},{x:8,y:1},{x:8,y:2},{x:8,y:4}],doors:[{id:'gate',x:4,y:3}],cameras:[{id:'cam1',x:8,y:3,dir:'down',danger:[{x:8,y:3}]}],
-      items:[{type:'badge',x:2,y:3,label:'Access badge'},{type:'intel',x:9,y:3,label:'Intel case'}],
-      note:'Practice: all seven skills in one op. One helper function keeps the wall detour manageable. HQ requires a def.',req:'A DEF FUNCTION'
+      desc:'Badge, door, wall, camera gate — every obstacle in one corridor.',
+      objective:'Open the door, detour the wall, disable the camera gate, extract.',cols:12,rows:6,lines:17,start:{x:1,y:3},exit:{x:10,y:3},walls:[{x:6,y:3},{x:8,y:1},{x:8,y:2},{x:8,y:4}],doors:[{id:'gate',x:4,y:3}],cameras:[{id:'cam1',x:8,y:3,dir:'down',danger:[{x:8,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:2,label:'Data chip'},{type:'intel',x:6,y:2,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'},{type:'badge',x:2,y:3,label:'Access badge'}],
+      note:'Practice: every skill so far in one op. A detour() function keeps the plan readable. HQ requires a def.',req:'A DEF FUNCTION'
     },
     {
       id:35,title:'The Grand Heist',short:'Final operation',code:'FINA-35',tag:'FINALE',
-      desc:'The final operation: two floors, two locked doors, a wall, a sealed camera gate, and two intel cases. Everything you have learned, in one heist.',
-      objective:'Clear the heist: badge, both doors, the wall, the camera gate, both cases — then extract.',cols:14,rows:8,lines:29,start:{x:1,y:6},exit:{x:11,y:1},walls:[{x:8,y:6},{x:10,y:1},{x:10,y:2},{x:10,y:3},{x:10,y:4},{x:10,y:5}],doors:[{id:'gate1',x:4,y:6},{id:'gate2',x:12,y:4}],cameras:[{id:'cam1',x:10,y:6,dir:'down',danger:[{x:10,y:6}]}],
-      items:[{type:'badge',x:2,y:6,label:'Access badge'},{type:'intel',x:6,y:6,label:'Intel case'},{type:'intel',x:12,y:1,label:'Intel case'}],
-      note:'Final exam. Plan on paper first, then write the cleanest program of your career. A detour() function and a cool head will see you through.',req:'A DEF FUNCTION'
+      desc:'The final op: two floors, two doors, a wall, a camera gate, two cases.',
+      objective:'Clear the heist: badge, both doors, the wall, the gate, both cases — then extract.',cols:14,rows:8,lines:34,start:{x:1,y:6},exit:{x:11,y:1},walls:[{x:8,y:6},{x:10,y:1},{x:10,y:2},{x:10,y:3},{x:10,y:4},{x:10,y:5}],doors:[{id:'gate1',x:4,y:6},{id:'gate2',x:12,y:4}],cameras:[{id:'cam1',x:10,y:6,dir:'down',danger:[{x:10,y:6}]}],
+      items:[{type:'intel',x:6,y:6,label:'Data chip'},{type:'intel',x:8,y:5,label:'Data chip'},{type:'intel',x:11,y:6,label:'Data chip'},{type:'intel',x:12,y:3,label:'Data chip'},{type:'intel',x:11,y:2,label:'Data chip'},{type:'badge',x:2,y:6,label:'Access badge'}],
+      note:'Final exam. A detour() function and a cool head — one chip hides off the main route on the upper floor.',req:'A DEF FUNCTION'
     },
     {
       id:36,title:'First Cache',short:'Store a number',code:'VARI-36',tag:'VARIABLES',
-      desc:'A distance is just a number — and numbers can be saved in a variable. Store the walk once, use it twice.',
-      objective:'Store d = 3, walk to the case with agent.step(d), collect, and reuse d to reach EX.',cols:9,rows:7,lines:5,start:{x:1,y:3},exit:{x:7,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:4,y:3,label:'Intel case'}],
-      note:'Skill 8 of 12 — VARIABLES: a line like d = 3 stores the number 3 under the name d. From then on, agent.step(d) walks 3 tiles. HQ REQUIREMENT: your program must store a value with = and reuse it.',req:'A VARIABLE (n = 3)'
+      desc:'A distance is just a number — store it once, use it twice.',
+      objective:'Store d = 3, walk to the case with agent.step(d), and reuse d to reach EX.',cols:9,rows:7,lines:4,start:{x:1,y:3},exit:{x:7,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Skill 8 of 12 — VARIABLES: d = 3 stores the number 3 under the name d. HQ REQUIREMENT: your program must store a value with = and reuse it.',req:'A VARIABLE (n = 3)'
     },
     {
       id:37,title:'Double Distance',short:'Math in variables',code:'VARI-37',tag:'VARIABLES',
-      desc:'One stored number can power two different walks. Python does the math before the agent moves.',
-      objective:'Store n = 2, walk n tiles to collect, then walk n * 2 tiles to EX.',cols:9,rows:7,lines:5,start:{x:1,y:3},exit:{x:7,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:3,label:'Intel case'}],
-      note:'Practice: expressions work anywhere a number does. agent.step(n * 2) doubles the stored distance in one command.',req:'A VARIABLE (n = 3)'
+      desc:'One stored number powers two different walks. Python does the math.',
+      objective:'Store n = 2, walk n tiles to collect, then walk n * 2 tiles to EX.',cols:9,rows:7,lines:4,start:{x:1,y:3},exit:{x:7,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Practice: expressions work anywhere numbers do — agent.step(n * 2) doubles the stored distance.',req:'A VARIABLE (n = 3)'
     },
     {
       id:38,title:'The Counted Chain',short:'Variable drives a loop',code:'VARI-38',tag:'VARIABLES',
-      desc:'Four cases in a row. Instead of hard-coding range(4), store the count in a variable and let the loop read it.',
-      objective:'Store the case count in n, loop n times to collect every case, then walk to EX.',cols:9,rows:5,lines:6,start:{x:1,y:3},exit:{x:7,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:2,y:3,label:'Intel case'},{type:'intel',x:3,y:3,label:'Intel case'},{type:'intel',x:4,y:3,label:'Intel case'},{type:'intel',x:5,y:3,label:'Intel case'}],
-      note:'Practice: n = 4 then for i in range(n): — the loop repeats as many times as the variable says. Change n, and the whole plan changes with it.',req:'A VARIABLE (n = 3)'
+      desc:'Four cases in a row. Store the count in a variable and let the loop read it.',
+      objective:'Store the case count in n, loop n times to collect every case, then walk to EX.',cols:9,rows:5,lines:5,start:{x:1,y:3},exit:{x:7,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Practice: for i in range(n): repeats as many times as the variable says. Change n and the plan changes.',req:'A VARIABLE (n = 3)'
     },
     {
       id:39,title:'Growing Stride',short:'Updating a variable',code:'VARI-39',tag:'VARIABLES',
-      desc:'Each walk is one tile longer than the last: 1, then 2, then 3. A variable that updates itself is the clean way to grow.',
-      objective:'Start d at 0, then loop 3 times: raise d by 1, walk d tiles, collect.',cols:10,rows:5,lines:7,start:{x:1,y:3},exit:{x:8,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:2,y:3,label:'Intel case'},{type:'intel',x:4,y:3,label:'Intel case'},{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Practice: d = d + 1 reads the old value, adds 1, and stores the result back. That is how counters grow in real programs.',req:'A VARIABLE (n = 3)'
+      desc:'Each walk grows: 1, then 2, then 3. A self-updating variable counts it.',
+      objective:'Start d at 0, then loop 3 times: raise d by 1, walk d tiles, collect.',cols:10,rows:5,lines:6,start:{x:1,y:3},exit:{x:8,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Practice: d = d + 1 reads the old value, adds 1, stores it back — that is how counters grow.',req:'A VARIABLE (n = 3)'
     },
     {
       id:40,title:'Variable Mastery',short:'Patrol square',code:'VARI-40',tag:'VARIABLES',
-      desc:'Mastery drill: a square patrol where one variable holds the side length. Four identical legs — the loop reads the variable every time.',
-      objective:'Store side = 3, collect the case, then loop 4 times: walk side tiles, collect, turn right. You land back on EX.',cols:8,rows:7,lines:6,start:{x:2,y:1},exit:{x:2,y:1},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:5,y:1,label:'Intel case'},{type:'intel',x:5,y:4,label:'Intel case'},{type:'intel',x:2,y:4,label:'Intel case'}],
-      note:'Mastery drill: variables + loops. The extraction point is the tile you started on — walk side, collect, turn right, four times over.',req:'A VARIABLE (n = 3)'
+      desc:'Mastery: a square patrol where one variable holds the side length.',
+      objective:'Store side = 3, collect the case, then loop 4 times: walk side tiles, collect, turn right.',cols:8,rows:7,lines:16,start:{x:2,y:1},exit:{x:2,y:1},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:5,y:1,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:4,y:4,label:'Data chip'},{type:'intel',x:2,y:4,label:'Data chip'},{type:'intel',x:3,y:2,label:'Data chip'}],
+      note:'Mastery drill: variables + loops. One chip hides inside the square — break the patrol once to grab it, then finish the four sides.',req:'A VARIABLE (n = 3)'
     },
     {
       id:41,title:'Sentinel Walk',short:'Walk until blocked',code:'WHIL-41',tag:'WHILE LOOPS',
-      desc:'Some corridors you do not count — you just walk until something stops you. A while loop checks before every single step.',
-      objective:'Walk forward one tile at a time while no wall is ahead. Collect whatever you pass. The loop stops by itself at EX.',cols:10,rows:7,lines:4,start:{x:1,y:3},exit:{x:8,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4}],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:3,label:'Intel case'},{type:'intel',x:5,y:3,label:'Intel case'},{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Skill 9 of 12 — WHILE LOOPS: while CONDITION: repeats as long as the condition is true. agent.wall_ahead() is true when the next tile is blocked, so "while not agent.wall_ahead()" walks until the corridor ends. HQ REQUIREMENT: your program must contain a while loop.',req:'A WHILE LOOP'
+      desc:'Some corridors you do not count — you walk until something stops you.',
+      objective:'Walk one tile at a time while no wall is ahead, collecting as you go. The loop stops itself at EX.',cols:10,rows:7,lines:3,start:{x:1,y:3},exit:{x:8,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4}],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Skill 9 of 12 — WHILE LOOPS: while CONDITION: repeats as long as the condition is true. HQ REQUIREMENT: your program must contain a while loop.',req:'A WHILE LOOP'
     },
     {
       id:42,title:'Corner Sentinel',short:'While + turns',code:'WHIL-42',tag:'WHILE LOOPS',
-      desc:'Two corridors meet in a corner. Walk each one to the end with a sentinel loop — the wall tells you when to turn.',
-      objective:'Twice: walk while no wall is ahead (collecting on the way), then turn left.',cols:9,rows:8,lines:6,start:{x:1,y:6},exit:{x:7,y:1},walls:[{x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5},{x:6,y:1},{x:6,y:2},{x:6,y:3},{x:6,y:4},{x:6,y:5}],doors:[],cameras:[],
-      items:[{type:'intel',x:4,y:6,label:'Intel case'},{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Practice: the same while loop handles both corridors, whatever their length. Walk until blocked, turn, repeat.',req:'A WHILE LOOP'
+      desc:'Two corridors meet at a corner. The wall tells you when to turn.',
+      objective:'Twice: walk while no wall is ahead, collecting on the way, then turn left.',cols:9,rows:8,lines:5,start:{x:1,y:6},exit:{x:7,y:1},walls:[{x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5},{x:6,y:1},{x:6,y:2},{x:6,y:3},{x:6,y:4},{x:6,y:5}],doors:[],cameras:[],
+      items:[{type:'intel',x:4,y:6,label:'Data chip'},{type:'intel',x:6,y:6,label:'Data chip'},{type:'intel',x:7,y:5,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'}],
+      note:'Practice: one sentinel loop handles both corridors, whatever their length.',req:'A WHILE LOOP'
     },
     {
       id:43,title:'Stairway Sentinel',short:'While + zigzag',code:'WHIL-43',tag:'WHILE LOOPS',
-      desc:'A staircase climbs to the roof exit. Each stair is one step right, one step up — repeated until the wall on the roof says stop.',
-      objective:'Loop while no wall is ahead: step, turn left, step, collect, turn right.',cols:9,rows:8,lines:7,start:{x:1,y:6},exit:{x:6,y:1},walls:[{x:7,y:1}],doors:[],cameras:[],
-      items:[{type:'intel',x:2,y:5,label:'Intel case'},{type:'intel',x:3,y:4,label:'Intel case'},{type:'intel',x:4,y:3,label:'Intel case'},{type:'intel',x:5,y:2,label:'Intel case'}],
-      note:'Practice: the loop body builds one whole stair. The sentinel (wall_ahead) decides when the staircase is finished.',req:'A WHILE LOOP'
+      desc:'A staircase climbs to the roof. Each stair: one step right, one step up.',
+      objective:'Loop while no wall is ahead: step, turn left, step, collect, turn right.',cols:9,rows:8,lines:6,start:{x:1,y:6},exit:{x:6,y:1},walls:[{x:7,y:1}],doors:[],cameras:[],
+      items:[{type:'intel',x:2,y:5,label:'Data chip'},{type:'intel',x:3,y:4,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:5,y:2,label:'Data chip'}],
+      note:'Practice: the loop body builds one stair; wall_ahead decides when the staircase ends.',req:'A WHILE LOOP'
     },
     {
       id:44,title:'Silent Patrol',short:'While + cameras',code:'WHIL-44',tag:'WHILE LOOPS',
-      desc:'A patrolled corridor with two live cameras. The sentinel walks; a check inside the loop disarms each camera just before crossing.',
-      objective:'Walk one tile at a time while no wall is ahead; whenever a camera guards the next tile, disable it first.',cols:12,rows:7,lines:6,start:{x:1,y:3},exit:{x:10,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:10,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4}],doors:[],cameras:[{id:'cam1',x:5,y:3,dir:'down',danger:[{x:5,y:3}]},{id:'cam2',x:9,y:3,dir:'down',danger:[{x:9,y:3}]}],
-      items:[{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Practice: while keeps walking, if handles the camera. Combining the two is how real patrols are written.',req:'A WHILE LOOP'
+      desc:'A patrolled corridor with two live cameras. Walk and disarm as you go.',
+      objective:'Walk while no wall is ahead; whenever a camera guards the next tile, disable it first.',cols:12,rows:7,lines:5,start:{x:1,y:3},exit:{x:10,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:10,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4}],doors:[],cameras:[{id:'cam1',x:5,y:3,dir:'down',danger:[{x:5,y:3}]},{id:'cam2',x:9,y:3,dir:'down',danger:[{x:9,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'}],
+      note:'Practice: while keeps walking, if handles the camera — that is how real patrols are written.',req:'A WHILE LOOP'
     },
     {
       id:45,title:'Spiral Descent',short:'While + counters',code:'WHIL-45',tag:'WHILE LOOPS',
-      desc:'A shrinking spiral: 4 tiles, then 3, then 2, then 1. A counter variable and a while loop trace it perfectly.',
-      objective:'Start n at 4. While n is above 0: walk n tiles, collect, turn right, and lower n by 1.',cols:8,rows:7,lines:7,start:{x:1,y:1},exit:{x:3,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:5,y:1,label:'Intel case'},{type:'intel',x:5,y:4,label:'Intel case'},{type:'intel',x:3,y:4,label:'Intel case'}],
-      note:'Mastery drill: while loops shine when the number of repeats is computed. Here n counts the spiral down to zero.',req:'A WHILE LOOP'
+      desc:'A shrinking spiral: 4 tiles, then 3, then 2, then 1.',
+      objective:'Start n at 4. While n is above 0: walk n tiles, collect, turn right, lower n by 1.',cols:8,rows:7,lines:16,start:{x:1,y:1},exit:{x:3,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:1,label:'Data chip'},{type:'intel',x:5,y:1,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:4,y:4,label:'Data chip'},{type:'intel',x:2,y:2,label:'Data chip'}],
+      note:'Mastery drill: while loops shine when the count is computed. One chip hides inside the first arm — dip in before the spiral begins.',req:'A WHILE LOOP'
     },
     {
       id:46,title:'Two Watches',short:'Stop on two sensors',code:'LOGI-46',tag:'LOGIC',
-      desc:'The corridor can end in a wall OR a live camera. Check both sensors at once and stop at whichever comes first.',
-      objective:'Walk while no wall is ahead AND no camera is ahead. Disable the camera, then walk the rest of the way.',cols:11,rows:7,lines:9,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4}],doors:[],cameras:[{id:'cam1',x:5,y:3,dir:'down',danger:[{x:5,y:3}]}],
-      items:[{type:'intel',x:3,y:3,label:'Intel case'},{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Skill 10 of 12 — LOGIC: and needs both sides true, or needs at least one, not flips a condition. "while not wall and not camera" keeps walking only when BOTH sensors are clear. HQ REQUIREMENT: combine conditions with and / or / not.',req:'AND / OR / NOT'
+      desc:'The corridor can end in a wall OR a live camera. Check both at once.',
+      objective:'Walk while no wall AND no camera is ahead. Disable the camera, then finish the route.',cols:11,rows:7,lines:7,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4}],doors:[],cameras:[{id:'cam1',x:5,y:3,dir:'down',danger:[{x:5,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'}],
+      note:'Skill 10 of 12 — LOGIC: and needs both sides true, or needs one, not flips a condition. HQ REQUIREMENT: combine conditions with and / or / not.',req:'AND / OR / NOT'
     },
     {
       id:47,title:'Stop Rules',short:'or stops the walk',code:'LOGI-47',tag:'LOGIC',
-      desc:'A camera gate, then a locked door — two very different blockers. One sentinel rule stops at either: wall OR camera.',
-      objective:'Walk while not (wall ahead or camera ahead). Handle the camera, walk to the door, open it, and finish the route.',cols:12,rows:7,lines:13,start:{x:1,y:3},exit:{x:10,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:10,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4}],doors:[{id:'lock',x:7,y:3}],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]}],
-      items:[{type:'badge',x:2,y:3,label:'Access badge'},{type:'intel',x:9,y:3,label:'Intel case'}],
-      note:'Practice: not (a or b) stops at the first blocker of any kind. One loop, two obstacle types — that is the power of or.',req:'AND / OR / NOT'
+      desc:'A camera gate, then a locked door — one sentinel rule stops at either.',
+      objective:'Walk while not (wall ahead or camera ahead). Handle the camera, open the door, finish.',cols:12,rows:7,lines:10,start:{x:1,y:3},exit:{x:10,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:10,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4}],doors:[{id:'lock',x:7,y:3}],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'},{type:'intel',x:8,y:3,label:'Data chip'},{type:'badge',x:2,y:3,label:'Access badge'}],
+      note:'Practice: not (a or b) stops at the first blocker of any kind. One loop, two obstacle types.',req:'AND / OR / NOT'
     },
     {
       id:48,title:'Double Condition',short:'Counter and sensor',code:'LOGI-48',tag:'LOGIC',
-      desc:'Three cases, then a sprint to the exit. Stop collecting when the counter hits 3 AND keep a sensor check as a safety net.',
-      objective:'Collect the three cases with a loop that runs while i < 3 and no wall is ahead, then walk to EX.',cols:11,rows:7,lines:7,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4}],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:3,label:'Intel case'},{type:'intel',x:5,y:3,label:'Intel case'},{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Practice: i < 3 and not agent.wall_ahead() — two guards on one loop. and means the loop continues only while BOTH hold.',req:'AND / OR / NOT'
+      desc:'Three cases, then a sprint. Stop when the counter hits 3 — with a sensor safety net.',
+      objective:'Collect the cases in a loop that runs while i < 3 and no wall is ahead, then walk to EX.',cols:11,rows:7,lines:6,start:{x:1,y:3},exit:{x:9,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4}],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'}],
+      note:'Practice: two guards on one loop — and means the loop continues only while BOTH hold.',req:'AND / OR / NOT'
     },
     {
       id:49,title:'Fork Sensors',short:'Store and combine',code:'LOGI-49',tag:'LOGIC',
-      desc:'A T-junction: one branch is walled off, the other leads to extraction. Store a sensor reading in a variable, then combine it with a second check.',
-      objective:'Face the upper branch and store blocked_up = agent.wall_ahead(). Then, if blocked_up and the lower lane is clear, walk it to EX.',cols:9,rows:8,lines:10,start:{x:1,y:3},exit:{x:4,y:6},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:3,y:5},{x:3,y:6},{x:5,y:5},{x:5,y:6}],doors:[],cameras:[],
-      items:[{type:'intel',x:4,y:5,label:'Intel case'}],
-      note:'Practice: readings can live in variables — blocked_up = agent.wall_ahead(). Combine stored facts with and / not to choose a route.',req:'AND / OR / NOT'
+      desc:'A T-junction: one branch walled off, the other leads out. Store the reading first.',
+      objective:'Store blocked_up = agent.wall_ahead(); if blocked_up, take the lower lane to EX.',cols:9,rows:8,lines:9,start:{x:1,y:3},exit:{x:4,y:6},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:3,y:5},{x:3,y:6},{x:5,y:5},{x:5,y:6}],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:4,y:4,label:'Data chip'},{type:'intel',x:4,y:5,label:'Data chip'}],
+      note:'Practice: sensor readings can live in variables — combine stored facts with and / not to choose a route.',req:'AND / OR / NOT'
     },
     {
       id:50,title:'Logic Mastery',short:'Camera, wall, logic',code:'LOGI-50',tag:'LOGIC',
-      desc:'Mastery drill: a camera gate early on, a full wall block later, and logic tying the whole patrol together.',
-      objective:'Sentinel-walk with not (wall or camera), disable the camera, walk to the block, detour over it, and sentinel-walk to EX.',cols:13,rows:7,lines:19,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:9,y:2},{x:10,y:2},{x:11,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4},{x:11,y:4},{x:7,y:3}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]}],
-      items:[{type:'intel',x:9,y:3,label:'Intel case'}],
-      note:'Mastery drill: logic. Two sentinel walks, one if, one four-turn detour — every condition earns its place.',req:'AND / OR / NOT'
+      desc:'Mastery: a camera gate early, a full wall block later, logic tying it together.',
+      objective:'Sentinel-walk past blockers, disable the camera, detour the wall, walk to EX.',cols:13,rows:7,lines:23,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:9,y:2},{x:10,y:2},{x:11,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4},{x:11,y:4},{x:7,y:3}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]}],
+      items:[{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:2,label:'Data chip'},{type:'intel',x:8,y:1,label:'Data chip'},{type:'intel',x:8,y:3,label:'Data chip'},{type:'intel',x:7,y:2,label:'Data chip'}],
+      note:'Mastery drill: logic. Two sentinel walks, one if, one four-turn detour — and one chip hides in the detour lane.',req:'AND / OR / NOT'
     },
     {
       id:51,title:'First List',short:'A plan in brackets',code:'LIST-51',tag:'LISTS',
-      desc:'Three walks of different lengths — pack them into one list and let a loop run the whole plan.',
-      objective:'Store steps = [2, 1, 3], loop over the list walking each distance and collecting, then step to EX.',cols:10,rows:7,lines:6,start:{x:1,y:3},exit:{x:8,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:3,label:'Intel case'},{type:'intel',x:4,y:3,label:'Intel case'},{type:'intel',x:7,y:3,label:'Intel case'}],
-      note:'Skill 11 of 12 — LISTS: [2, 1, 3] is a list of three numbers. "for s in steps:" visits them one by one, with s holding each value in turn. HQ REQUIREMENT: your program must build a list with [...].',req:'A LIST'
+      desc:'Three walks of different lengths — pack them into one list.',
+      objective:'Store steps = [2, 1, 3], loop over it walking each distance and collecting, then step to EX.',cols:10,rows:7,lines:5,start:{x:1,y:3},exit:{x:8,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Skill 11 of 12 — LISTS: [2, 1, 3] holds three numbers; for s in steps: visits them one by one. HQ REQUIREMENT: your program must build a list with [...].',req:'A LIST'
     },
     {
       id:52,title:'Turn Plan',short:'List of directions',code:'LIST-52',tag:'LISTS',
-      desc:'A slalom route: straight runs with a turn after each one. Directions are just words — a list of them drives the whole route.',
-      objective:'Store the four turn directions in a list, then loop: walk 2, collect, turn as the list says. One last walk reaches EX.',cols:9,rows:8,lines:7,start:{x:1,y:5},exit:{x:7,y:5},walls:[{x:2,y:4},{x:4,y:4},{x:6,y:4}],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:5,label:'Intel case'},{type:'intel',x:3,y:3,label:'Intel case'},{type:'intel',x:5,y:3,label:'Intel case'},{type:'intel',x:5,y:5,label:'Intel case'}],
-      note:'Practice: strings live in lists too. turns = ["left", "right", ...] and agent.turn(t) reads each direction straight from the plan.',req:'A LIST'
+      desc:'A slalom: straight runs with a turn after each. Directions are just words in a list.',
+      objective:'Loop: walk 2, collect, turn as the list says. One last walk reaches EX.',cols:9,rows:8,lines:6,start:{x:1,y:5},exit:{x:7,y:5},walls:[{x:2,y:4},{x:4,y:4},{x:6,y:4}],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:5,label:'Data chip'},{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:5,y:5,label:'Data chip'}],
+      note:'Practice: strings live in lists too — turns = ["left", "right", ...] and agent.turn(t) reads each direction from the plan.',req:'A LIST'
     },
     {
       id:53,title:'Zipped Plans',short:'Two lists, one loop',code:'LIST-53',tag:'LISTS',
-      desc:'Walks AND turns, paired up. Two lists plus zip() run both plans in lock-step — a real-world Python pattern.',
-      objective:'Zip a steps list with a turns list, loop over the pairs, then climb to the intel and EX.',cols:10,rows:8,lines:9,start:{x:1,y:5},exit:{x:5,y:1},walls:[{x:2,y:4},{x:6,y:4},{x:4,y:2}],doors:[],cameras:[],
-      items:[{type:'intel',x:5,y:2,label:'Intel case'}],
-      note:'Practice: for s, t in zip(steps, turns): unpacks one value from each list every round. Two plans, one loop.',req:'A LIST'
+      desc:'Walks AND turns, paired up. zip() runs both plans in lock-step.',
+      objective:'Zip a steps list with a turns list, loop over the pairs, then climb to EX.',cols:10,rows:8,lines:8,start:{x:1,y:5},exit:{x:5,y:1},walls:[{x:2,y:4},{x:6,y:4},{x:4,y:2}],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:5,label:'Data chip'},{type:'intel',x:3,y:4,label:'Data chip'},{type:'intel',x:5,y:4,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'}],
+      note:'Practice: for s, t in zip(steps, turns): unpacks one value from each list every round.',req:'A LIST'
     },
     {
       id:54,title:'Gate Distances',short:'List-driven cameras',code:'LIST-54',tag:'LISTS',
-      desc:'Two camera gates at different ranges. Store the approach distances in a list and clear both gates with one compact loop.',
-      objective:'Loop over the gap list: walk the gap, disable the camera. Then collect the case and extract.',cols:13,rows:7,lines:8,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:10,y:2},{x:11,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4},{x:11,y:4}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]},{id:'cam2',x:8,y:3,dir:'down',danger:[{x:8,y:3}]}],
-      items:[{type:'intel',x:9,y:3,label:'Intel case'}],
-      note:'Practice: gates = [2, 4] holds the distance to each gate. The loop body never changes — only the data does.',req:'A LIST'
+      desc:'Two camera gates at different ranges. Store the approach gaps in a list.',
+      objective:'Loop over the gap list: walk the gap, disable the camera. Then collect and extract.',cols:13,rows:7,lines:7,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:10,y:2},{x:11,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4},{x:11,y:4}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]},{id:'cam2',x:8,y:3,dir:'down',danger:[{x:8,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'},{type:'intel',x:9,y:3,label:'Data chip'}],
+      note:'Practice: gates = [2, 4] holds the distances — the loop body never changes, only the data.',req:'A LIST'
     },
     {
       id:55,title:'List Mastery',short:'Slalom + camera gate',code:'LIST-55',tag:'LISTS',
-      desc:'Mastery drill: a zip-driven slalom through four cases, ending at a sealed camera gate. Data drives, the loop executes.',
-      objective:'Zip steps with turns to clear the four cases, walk up to the gate, disable the camera, and extract.',cols:14,rows:8,lines:10,start:{x:1,y:5},exit:{x:12,y:5},walls:[{x:2,y:4},{x:4,y:4},{x:6,y:4},{x:10,y:1},{x:10,y:2},{x:10,y:3},{x:10,y:4},{x:10,y:6}],doors:[],cameras:[{id:'cam1',x:10,y:5,dir:'down',danger:[{x:10,y:5}]}],
-      items:[{type:'intel',x:3,y:5,label:'Intel case'},{type:'intel',x:3,y:3,label:'Intel case'},{type:'intel',x:5,y:3,label:'Intel case'},{type:'intel',x:5,y:5,label:'Intel case'}],
-      note:'Mastery drill: lists. The slalom is pure data — change the lists and the route changes. The gate at the end keeps you honest.',req:'A LIST'
+      desc:'Mastery: a zip-driven slalom through four cases, ending at a sealed camera gate.',
+      objective:'Zip steps with turns to clear the cases, walk to the gate, disable it, extract.',cols:14,rows:8,lines:16,start:{x:1,y:5},exit:{x:12,y:5},walls:[{x:2,y:4},{x:4,y:4},{x:6,y:4},{x:10,y:1},{x:10,y:2},{x:10,y:3},{x:10,y:4},{x:10,y:6}],doors:[],cameras:[{id:'cam1',x:10,y:5,dir:'down',danger:[{x:10,y:5}]}],
+      items:[{type:'intel',x:3,y:4,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:5,y:5,label:'Data chip'},{type:'intel',x:8,y:5,label:'Data chip'},{type:'intel',x:7,y:4,label:'Data chip'}],
+      note:'Mastery drill: lists. The slalom is pure data — one chip hides above the final run, and the gate keeps you honest.',req:'A LIST'
     },
     {
       id:56,title:'First Argument',short:'A function that takes input',code:'ARGU-56',tag:'ARGUMENTS',
-      desc:'A hop of 2 and a hop of 3 — the same move, different sizes. Give the function an argument and one definition handles both.',
-      objective:'Define hop(n) to walk n tiles and collect. Call hop(2), hop(3), hop(2) to reach EX.',cols:10,rows:7,lines:7,start:{x:1,y:3},exit:{x:8,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:3,label:'Intel case'},{type:'intel',x:6,y:3,label:'Intel case'}],
-      note:'Skill 12 of 12 — ARGUMENTS: def hop(n): names its input n; calling hop(3) runs the block with n = 3. One definition, many sizes. HQ REQUIREMENT: define a function that takes an argument.',req:'A FUNCTION WITH ARGUMENTS'
+      desc:'A hop of 2 and a hop of 3 — the same move, different sizes. One definition handles both.',
+      objective:'Define hop(n) to walk n tiles and collect. Call hop(2), hop(3), hop(2) to reach EX.',cols:10,rows:7,lines:6,start:{x:1,y:3},exit:{x:8,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'}],
+      note:'Skill 12 of 12 — ARGUMENTS: def hop(n): names its input n; hop(3) runs the block with n = 3. HQ REQUIREMENT: define a function that takes an argument.',req:'A FUNCTION WITH ARGUMENTS'
     },
     {
       id:57,title:'Loop-Driven Function',short:'Function + list',code:'ARGU-57',tag:'ARGUMENTS',
-      desc:'Four hops of different lengths, all from one list. The function takes the size; the loop feeds it from the data.',
-      objective:'Define hop(n), store the four gaps in a list, loop over them calling hop(g), then step to EX.',cols:12,rows:7,lines:8,start:{x:1,y:3},exit:{x:10,y:3},walls:[],doors:[],cameras:[],
-      items:[{type:'intel',x:3,y:3,label:'Intel case'},{type:'intel',x:6,y:3,label:'Intel case'},{type:'intel',x:8,y:3,label:'Intel case'},{type:'intel',x:9,y:3,label:'Intel case'}],
-      note:'Practice: functions + lists + loops — the full toolkit. hop never changes; the list decides every distance.',req:'A FUNCTION WITH ARGUMENTS'
+      desc:'Four hops of different lengths, all fed from one list.',
+      objective:'Define hop(n), store the four gaps in a list, loop calling hop(g), then step to EX.',cols:12,rows:7,lines:7,start:{x:1,y:3},exit:{x:10,y:3},walls:[],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:6,y:3,label:'Data chip'},{type:'intel',x:8,y:3,label:'Data chip'}],
+      note:'Practice: functions + lists + loops — the full toolkit. The list decides every distance.',req:'A FUNCTION WITH ARGUMENTS'
     },
     {
       id:58,title:'Sweep Function',short:'Loop inside a function',code:'ARGU-58',tag:'ARGUMENTS',
-      desc:'An L-shaped sweep in three segments of different lengths. sweep(n) walks and collects n tiles — call it three times.',
-      objective:'Define sweep(n) with a loop inside, then sweep 3, turn, sweep 2, turn, sweep 3 to EX.',cols:9,rows:8,lines:10,start:{x:1,y:5},exit:{x:7,y:3},walls:[{x:2,y:4},{x:3,y:4},{x:5,y:4},{x:6,y:4}],doors:[],cameras:[],
-      items:[{type:'intel',x:2,y:5,label:'Intel case'},{type:'intel',x:4,y:4,label:'Intel case'},{type:'intel',x:6,y:3,label:'Intel case'}],
-      note:'Practice: a function can own a whole loop. sweep(3) walks three tiles collecting everything; sweep(2) walks two.',req:'A FUNCTION WITH ARGUMENTS'
+      desc:'An L-shaped sweep in three segments of different lengths.',
+      objective:'Define sweep(n) with a loop inside; sweep 3, turn, sweep 2, turn, sweep 3 to EX.',cols:9,rows:8,lines:9,start:{x:1,y:5},exit:{x:7,y:3},walls:[{x:2,y:4},{x:3,y:4},{x:5,y:4},{x:6,y:4}],doors:[],cameras:[],
+      items:[{type:'intel',x:3,y:5,label:'Data chip'},{type:'intel',x:4,y:5,label:'Data chip'},{type:'intel',x:4,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'}],
+      note:'Practice: a function can own a whole loop — sweep(3) walks three tiles collecting everything.',req:'A FUNCTION WITH ARGUMENTS'
     },
     {
       id:59,title:'Parameter Patrol',short:'Function clears gates',code:'ARGU-59',tag:'ARGUMENTS',
-      desc:'Two camera gates, one routine. gate(gap) walks the approach and disarms the camera — the argument is the only thing that changes.',
-      objective:'Define gate(gap), loop over the two gaps calling gate(g), then collect the case and extract.',cols:13,rows:7,lines:10,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:10,y:2},{x:11,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4},{x:11,y:4}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]},{id:'cam2',x:8,y:3,dir:'down',danger:[{x:8,y:3}]}],
-      items:[{type:'intel',x:9,y:3,label:'Intel case'}],
-      note:'Practice: the patrol routine from before, now parameterized. gap is a placeholder the caller fills in each time.',req:'A FUNCTION WITH ARGUMENTS'
+      desc:'Two camera gates, one routine. The argument is the only thing that changes.',
+      objective:'Define gate(gap), loop over the two gaps calling gate(g), collect, and extract.',cols:13,rows:7,lines:9,start:{x:1,y:3},exit:{x:11,y:3},walls:[{x:1,y:2},{x:2,y:2},{x:3,y:2},{x:4,y:2},{x:5,y:2},{x:6,y:2},{x:7,y:2},{x:8,y:2},{x:9,y:2},{x:10,y:2},{x:11,y:2},{x:1,y:4},{x:2,y:4},{x:3,y:4},{x:4,y:4},{x:5,y:4},{x:6,y:4},{x:7,y:4},{x:8,y:4},{x:9,y:4},{x:10,y:4},{x:11,y:4}],doors:[],cameras:[{id:'cam1',x:4,y:3,dir:'down',danger:[{x:4,y:3}]},{id:'cam2',x:8,y:3,dir:'down',danger:[{x:8,y:3}]}],
+      items:[{type:'intel',x:3,y:3,label:'Data chip'},{type:'intel',x:5,y:3,label:'Data chip'},{type:'intel',x:7,y:3,label:'Data chip'},{type:'intel',x:9,y:3,label:'Data chip'}],
+      note:'Practice: the patrol routine, parameterized — gap is a placeholder each caller fills in.',req:'A FUNCTION WITH ARGUMENTS'
     },
     {
       id:60,title:'The Full Arsenal',short:'Grand finale',code:'ARGU-60',tag:'ARGUMENTS',
-      desc:'The graduation heist: a badge, a locked vault door, a camera gate, a case of intel, and a sentinel walk out. Every Python skill from the whole campaign, in one program.',
-      objective:'Grab the badge, open the vault, use a gate(gap) function for the camera, take the intel, and sentinel-walk to EX.',cols:14,rows:8,lines:13,start:{x:1,y:6},exit:{x:12,y:6},walls:[{x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:7,y:1},{x:7,y:2},{x:7,y:3},{x:7,y:4},{x:7,y:5}],doors:[{id:'vault',x:4,y:6}],cameras:[{id:'cam1',x:7,y:6,dir:'down',danger:[{x:7,y:6}]}],
-      items:[{type:'badge',x:2,y:6,label:'Access badge'},{type:'intel',x:8,y:6,label:'Intel case'}],
-      note:'Final exam of the extended campaign: variables, while, logic, lists, and functions with arguments — all of it. Plan first, write once, extract.',req:'A FUNCTION WITH ARGUMENTS'
+      desc:'The graduation heist: badge, vault door, camera gate, intel, and a sentinel walk out.',
+      objective:'Grab the badge, open the vault, use gate(gap) on the camera, take the intel, extract.',cols:14,rows:8,lines:18,start:{x:1,y:6},exit:{x:12,y:6},walls:[{x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:7,y:1},{x:7,y:2},{x:7,y:3},{x:7,y:4},{x:7,y:5}],doors:[{id:'vault',x:4,y:6}],cameras:[{id:'cam1',x:7,y:6,dir:'down',danger:[{x:7,y:6}]}],
+      items:[{type:'intel',x:3,y:6,label:'Data chip'},{type:'intel',x:6,y:6,label:'Data chip'},{type:'intel',x:8,y:6,label:'Data chip'},{type:'intel',x:10,y:6,label:'Data chip'},{type:'intel',x:9,y:5,label:'Data chip'},{type:'badge',x:2,y:6,label:'Access badge'}],
+      note:'Final exam: variables, while, logic, lists, and functions with arguments — one program. One chip waits above the exit lane.',req:'A FUNCTION WITH ARGUMENTS'
     }
   ];
 
-  const STORE_KEY = 'shadow-agency-python-v1';
-  const blankProfile = {completed:[], codes:{}, results:{}, taught:{}};
-  function loadProfile(){
-    try{
-      const raw = JSON.parse(localStorage.getItem(STORE_KEY) || 'null');
-      if(!raw || typeof raw !== 'object') return {...blankProfile};
-      return {completed:Array.isArray(raw.completed) ? raw.completed.filter(n=>Number.isInteger(n)&&n>=1&&n<=levels.length) : [], codes:raw.codes&&typeof raw.codes==='object'?raw.codes:{}, results:raw.results&&typeof raw.results==='object'?raw.results:{}, taught:raw.taught&&typeof raw.taught==='object'?raw.taught:{}};
-    }catch(_){return {...blankProfile};}
+  /* Stable storage keys — progress lives under these names and survives game updates. */
+  const STORE_KEY = 'shadow-agency-python-v1';          /* legacy single profile (auto-imported) */
+  const PLAYERS_KEY = 'shadow-agency-players-v1';       /* roster: key -> {name, created, last} */
+  const PROFILE_PFX = 'shadow-agency-profile-v1:';      /* PROFILE_PFX + key -> that player's profile */
+  const SESSION_KEY = 'shadow-agency-session-v1';       /* last signed-in player */
+  function newBlankProfile(){return {completed:[], codes:{}, results:{}, taught:{}, briefed:{}, viewMode:'2d'};}
+  function normalizeProfile(raw){
+    if(!raw || typeof raw !== 'object') return newBlankProfile();
+    return {completed:Array.isArray(raw.completed) ? raw.completed.filter(n=>Number.isInteger(n)&&n>=1&&n<=levels.length) : [], codes:raw.codes&&typeof raw.codes==='object'?raw.codes:{}, results:raw.results&&typeof raw.results==='object'?raw.results:{}, taught:raw.taught&&typeof raw.taught==='object'?raw.taught:{}, briefed:raw.briefed&&typeof raw.briefed==='object'?raw.briefed:{}, viewMode:raw.viewMode==='3d'?'3d':'2d'};
   }
-  let profile = loadProfile();
+  function readPlayers(){try{const p=JSON.parse(localStorage.getItem(PLAYERS_KEY)||'{}');return (p&&typeof p==='object')?p:{};}catch(_){return {};}}
+  function writePlayers(map){try{localStorage.setItem(PLAYERS_KEY,JSON.stringify(map));}catch(_){}}
+  function getSession(){try{return localStorage.getItem(SESSION_KEY)||'';}catch(_){return '';}}
+  function setSession(k){try{localStorage.setItem(SESSION_KEY,k);}catch(_){}}
+  /* Import a pre-accounts save file as operative "Agent" (runs once, never deletes the original). */
+  function migrateLegacyProfile(){
+    try{
+      if(Object.keys(readPlayers()).length>0) return;
+      const legacy=localStorage.getItem(STORE_KEY);
+      if(legacy && legacy!=='null'){
+        const map=readPlayers();map.agent={name:'Agent',created:Date.now(),last:Date.now()};
+        writePlayers(map);
+        localStorage.setItem(PROFILE_PFX+'agent',legacy);
+        setSession('agent');
+      }
+    }catch(_){}
+  }
+  let activePlayer=null;
+  let profile = newBlankProfile();
   let currentIndex = 0;
   let world = null;
   let busy = false;
@@ -1009,7 +1111,10 @@ body.stage-immersive{overflow:hidden}
   const ctx = canvas.getContext('2d');
 
   function saveProfile(){
-    try{localStorage.setItem(STORE_KEY, JSON.stringify(profile));}catch(_){/* private browsing can disable storage */}
+    try{
+      const dest=activePlayer?(PROFILE_PFX+activePlayer.key):STORE_KEY;
+      localStorage.setItem(dest, JSON.stringify(profile));
+    }catch(_){/* private browsing can disable storage */}
   }
   function currentLevel(){return levels[currentIndex];}
   function isUnlocked(index){return index===0 || profile.completed.includes(index);}
@@ -1035,22 +1140,22 @@ body.stage-immersive{overflow:hidden}
     const t=$('toast');t.textContent=text;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2300);
   }
   const lessons={
-    intel:{icon:'◈',title:'Intel Case',sub:'MISSION OBJECTIVE',body:'This is the package HQ sent you for. <b>Pick it up with <code>agent.collect()</code></b> while standing on it. Your agent carries it automatically — but extraction stays sealed until the intel is aboard, so always grab it before stepping onto <b>EX</b>.'},
+    intel:{icon:'◈',title:'Data Chip',sub:'MISSION INTEL',body:'Stolen data, dropped on the office floor. <b>Chips are picked up automatically the moment agent walks over them</b> — no command needed. Grabbing every chip on the map earns the third star, so sweep the floor before you extract.'},
     badge:{icon:'▤',title:'Access Badge',sub:'KEYCARD',body:'A security keycard. It does nothing on its own — but with it in your inventory, standing beside a locked door and running <code>agent.interact()</code> opens the door. <b>No badge, no entry.</b>'},
     door:{icon:'▦',title:'Locked Door Opened',sub:'ACCESS CONTROL',body:'Doors block the route until opened. The recipe: <b>collect the access badge first</b>, stand on a tile next to the door, then run <code>agent.interact()</code>. Once open, a door stays open for the rest of the run.'},
     camera:{icon:'◉',title:'Camera Disabled',sub:'STEALTH SYSTEMS',body:'Security cameras watch the <b>red danger tiles</b> — stepping onto a watched tile triggers the alarm and fails the run. Sneak beside the camera, check with <code>agent.camera_ahead()</code>, then run <code>agent.disable_camera()</code>. A disabled camera is blind forever.'},
-    skill_move:{icon:'➤',title:'Moving & Collecting',sub:'NEW SKILL · STAGE 1',body:'Your character is <b>agent</b>, and it starts facing <b>right</b> — the arrow shows where it points. Two commands run your first ops:<span class="lesson-code">agent.step(3)    <span class="cm"># walk forward 3 tiles</span>\nagent.collect()  <span class="cm"># pick up the item here</span></span><code>agent.step(n)</code> walks forward <b>n tiles</b> in the direction the arrow points. <code>agent.collect()</code> picks up whatever is on the tile you stand on. Write one command per line — they run top to bottom.'},
+    skill_move:{icon:'➤',title:'Moving & Collecting',sub:'NEW SKILL · STAGE 1',body:'Your character is <b>agent</b>, and it starts facing <b>right</b> — the arrow shows where it points. One command runs your first ops:<span class="lesson-code">agent.step(3)    <span class="cm"># walk forward 3 tiles</span></span><code>agent.step(n)</code> walks forward <b>n tiles</b> in the direction the arrow points. <b>Data chips are picked up automatically</b> the moment you walk over them — your only job is planning the route. Write one command per line — they run top to bottom.'},
     skill_turn:{icon:'⟳',title:'Turning',sub:'NEW SKILL · STAGE 6',body:'Corners need a new move. <b>Turning changes which way agent faces</b> without moving it:<span class="lesson-code">agent.step(2)\nagent.turn("left")\nagent.step(3)</span>Agent always starts facing right. <b>Turn first, then step</b> — a step always goes wherever the arrow currently points. Watch the arrow on the map to see the facing.'},
     skill_loops:{icon:'∞',title:'Loops',sub:'NEW SKILL · STAGE 11',body:'Long straight runs are boring to type. <b>A loop repeats code for you</b>:<span class="lesson-code">for i in range(4):\n    agent.step(1)</span>This walks forward 4 tiles. The indented line runs once per count — change the number in <code>range(4)</code> to change how many times it repeats. Perfect for long hallways.'},
-    skill_doors:{icon:'▦',title:'Keys & Doors',sub:'NEW SKILL · STAGE 21',body:'Locked doors won\u2019t budge for free. The routine is:<span class="lesson-code">agent.collect()    <span class="cm"># grab the badge first</span>\nagent.step(1)      <span class="cm"># stand beside the door</span>\nagent.interact()   <span class="cm"># open it</span></span>You must hold the <b>access badge</b> before <code>agent.interact()</code> will open a door, and you must stand on a tile <b>directly next to</b> the door when you call it.'},
-    skill_if:{icon:'⑂',title:'If Checks',sub:'NEW SKILL · STAGE 16',body:'Now agent can <b>make decisions</b>. <code>agent.wall_ahead()</code> reports whether the tile ahead is blocked:<span class="lesson-code">if agent.wall_ahead():\n    agent.turn("left")\nelse:\n    agent.step(1)</span>The indented block under <code>if</code> runs only when a wall is ahead. <code>else:</code> covers the other case. Use it to steer around obstacles automatically.'},
+    skill_doors:{icon:'▦',title:'Keys & Doors',sub:'NEW SKILL · STAGE 21',body:'Locked doors won\u2019t budge for free. The routine is:<span class="lesson-code">agent.step(2)      <span class="cm"># walk over the badge to grab it</span>\nagent.step(1)      <span class="cm"># stand beside the door</span>\nagent.interact()   <span class="cm"># open it</span></span>You must hold the <b>access badge</b> before <code>agent.interact()</code> will open a door, and you must stand on a tile <b>directly next to</b> the door when you call it.'},
+    skill_if:{icon:'⑂',title:'If Checks',sub:'NEW SKILL · STAGE 16',body:'Now agent can <b>make decisions</b>. <code>agent.wall_ahead()</code> reports whether the tile ahead is blocked:<span class="lesson-code">if agent.wall_ahead():\n    agent.turn("left")\n    agent.step(1)</span>The indented block runs only when the condition is true — no wall, no detour. Use if checks to react to whatever the corridor throws at you.'},
     skill_cameras:{icon:'◉',title:'Cameras',sub:'NEW SKILL · STAGE 26',body:'Cameras watch the <b>red danger tiles</b> — step onto a watched tile and the alarm ends the run. Disarm them first:<span class="lesson-code">if agent.camera_ahead():\n    agent.disable_camera()</span><code>agent.camera_ahead()</code> is true when a live camera guards the tile in front of agent. <code>agent.disable_camera()</code> switches it off, but it only works when agent is <b>right next to</b> the camera. Then cross safely.'},
     skill_functions:{icon:'ƒ',title:'Functions',sub:'NEW SKILL · STAGE 31',body:'Reuse a plan by wrapping it in a <b>function</b> — a named block you can call any time:<span class="lesson-code">def walk(count):\n    for i in range(count):\n        agent.step(1)\n\nwalk(3)</span>Define it once with <code>def name():</code>, indent the steps inside, then call it by name. Perfect for moves you repeat across a mission.'},
     skill_vars:{icon:'\u2254',title:'Variables',sub:'NEW SKILL \u00b7 STAGE 36',body:'A variable is a name that stores a value. Assign with <code>=</code> and reuse it anywhere a number goes:<span class="lesson-code">d = 3\nagent.step(d)\nagent.step(d * 2)</span>Change the value once and every command using it changes too. Update a variable with <code>d = d + 1</code> to build counters.'},
     skill_while:{icon:'\u21ba',title:'While Loops',sub:'NEW SKILL \u00b7 STAGE 41',body:'A while loop repeats <b>as long as its condition is true</b> \u2014 perfect when you do not know the count in advance:<span class="lesson-code">while not agent.wall_ahead():\n    agent.step(1)</span>The condition is checked before every round. This sentinel walks until the corridor ends on its own.'},
     skill_logic:{icon:'\u2227',title:'Logic: and / or / not',sub:'NEW SKILL \u00b7 STAGE 46',body:'Combine conditions into real decisions:<span class="lesson-code">if agent.wall_ahead() or agent.camera_ahead():\n    agent.turn("left")\nwhile i < 3 and not agent.wall_ahead():\n    agent.step(2)</span><code>and</code> needs both sides true, <code>or</code> needs at least one, and <code>not</code> flips a condition. Sensor readings can be stored too: <code>blocked = agent.wall_ahead()</code>.'},
     skill_lists:{icon:'\u2630',title:'Lists',sub:'NEW SKILL \u00b7 STAGE 51',body:'A list keeps many values in order:<span class="lesson-code">steps = [2, 1, 3]\nfor s in steps:\n    agent.step(s)</span>The loop visits each value, with <code>s</code> holding it. Lists can store numbers or strings \u2014 <code>["left", "right"]</code> \u2014 and <code>zip(a, b)</code> walks two lists together.'},
-    skill_args:{icon:'\u0192\u2099',title:'Function Arguments',sub:'NEW SKILL \u00b7 STAGE 56',body:'Give a function inputs and it becomes a machine:<span class="lesson-code">def hop(n):\n    agent.step(n)\n    agent.collect()\n\nhop(2)\nhop(3)</span><code>n</code> is a placeholder the caller fills in. One definition handles every size \u2014 call it with different arguments whenever you need it.'}
+    skill_args:{icon:'\u0192\u2099',title:'Function Arguments',sub:'NEW SKILL \u00b7 STAGE 56',body:'Give a function inputs and it becomes a machine:<span class="lesson-code">def hop(n):\n    agent.step(n)\n\nhop(2)\nhop(3)</span><code>n</code> is a placeholder the caller fills in. One definition handles every size \u2014 call it with different arguments whenever you need it.'}
   };
   function showLesson(key){
     const lesson=lessons[key];
@@ -1076,6 +1181,7 @@ body.stage-immersive{overflow:hidden}
   }
   const skillLessonByStage={1:'skill_move',6:'skill_turn',11:'skill_loops',16:'skill_if',21:'skill_doors',26:'skill_cameras',31:'skill_functions',36:'skill_vars',41:'skill_while',46:'skill_logic',51:'skill_lists',56:'skill_args'};
   function createWorld(){
+    panX=0;panY=0;zoom=1;
     const lv=currentLevel();
     world={player:{x:lv.start.x,y:lv.start.y,facing:'right'},items:lv.items.map(item=>({...item})),inventory:new Set(),openDoors:new Set(),disabledCameras:new Set(),failed:false,complete:false};
     $('winBanner').hidden=true;
@@ -1133,9 +1239,25 @@ body.stage-immersive{overflow:hidden}
     if(document.fullscreenElement!==screen)screen.classList.remove('immersive-fallback');
     syncFullscreenControls();fitBoardToStage();drawMap();
   }
+  function showBriefing(lv){
+    return new Promise(resolve=>{
+      $('briefTitle').textContent='STAGE '+lv.id+' · '+lv.title;
+      const chips=(lv.items||[]).filter(it=>it.type==='intel').length;
+      const lines=[];
+      lines.push('<b>OBJECTIVE:</b> '+lv.objective);
+      lines.push('<b>INTEL ON SITE:</b> '+chips+' data chips are scattered on the floor. They are picked up <b>automatically when you walk over them</b> — collecting every one of them earns the third star. Early stages keep them on your route; later stages hide them behind detours.');
+      if(lv.req)lines.push('<b>HQ REQUIREMENT:</b> this stage must be cleared with '+lv.req.toLowerCase()+'.');
+      lines.push('<b>STAR TARGETS:</b> ≤'+(starTargets[lv.id]||12)+' actions · ≤'+(lv.lines||'?')+' code lines · all '+chips+' chips.');
+      $('briefBody').innerHTML=lines.map(t=>'<p>'+t+'</p>').join('');
+      const ov=$('briefOverlay');ov.hidden=false;
+      const btn=$('briefBtn');
+      const close=()=>{ov.hidden=true;btn.removeEventListener('click',close);resolve();};
+      btn.addEventListener('click',close);btn.focus();
+    });
+  }
   async function selectLevel(index,loadCode=true){
     if(index<0||index>=levels.length||!isUnlocked(index)) return;
-    $('hubScreen').hidden=true;$('gameScreen').hidden=false;
+    $('hubScreen').hidden=true;$('gameScreen').hidden=false;$('adminPanel').hidden=true;
     currentIndex=index;hideAutocomplete();
     const lv=currentLevel();
     $('missionCode').textContent='OPERATION // '+String(lv.id).padStart(2,'0')+' · '+lv.code;
@@ -1144,14 +1266,15 @@ body.stage-immersive{overflow:hidden}
     $('objectiveText').textContent=lv.objective;
     $('fieldNote').textContent=lv.note;
     $('levelCount').textContent='MISSION '+String(index+1).padStart(2,'0')+' / '+String(levels.length).padStart(2,'0');
-    if(loadCode){editor.value=profile.codes[String(lv.id)] ?? '# Your character is named agent and starts facing right.\n# Move forward: agent.step(2)\n# Pick up an item: agent.collect()\n';editor.setSelectionRange(editor.value.length,editor.value.length);}
+    if(loadCode){editor.value=profile.codes[String(lv.id)] ?? '# Your character is named agent and starts facing right.\n# Move forward: agent.step(2)\n# Data chips are picked up automatically — route over them\n';editor.setSelectionRange(editor.value.length,editor.value.length);}
     updateEditorMeta();renderLevelCards();renderProgress();renderCommands();renderRank();updateAutocomplete();
     clearConsole();createWorld();addLog('New mission received. Control your character by writing commands like agent.step(2).','system');
     addLog('Character: agent. Starting direction: right.');
-    addLog('Security note: You must carry the intel to the extraction point.');
+    addLog('HQ intel: every data chip on the floor counts toward the perfect-heist star — route over all of them.');
     $('consoleState').textContent='● READY';
     updateButtons();
     enterStageFullscreen();
+    if(!profile.briefed[lv.id]){profile.briefed[lv.id]=true;saveProfile();await showBriefing(lv);}
     for(const [stageId,key] of Object.entries(skillLessonByStage)){
       if(Number(stageId)<=lv.id)await teachIfNew(key);
     }
@@ -1252,7 +1375,7 @@ body.stage-immersive{overflow:hidden}
       else if(done&&result.skipped)stats.textContent='Cleared by admin override — replay it to earn a real rating.';
       else if(done)stats.textContent='Previously cleared · replay to record a rating';
       else if(unlocked&&attempts)stats.textContent=attempts+' attempt'+(attempts===1?'':'s')+' · no extraction yet';
-      else if(unlocked)stats.textContent='★★★ = ≤'+(starTargets[lv.id]||12)+' actions + ≤'+(lv.lines||'?')+' lines + first-try clear.';
+      else if(unlocked)stats.textContent='★★★ = ≤'+(starTargets[lv.id]||12)+' actions + ≤'+(lv.lines||'?')+' lines + every data chip collected.';
       else stats.textContent='Clear Stage '+(lv.id-1)+' (“'+levels[i-1].title+'”) to unlock.';
       performance.append(grade,stats);
       const foot=document.createElement('span');foot.className='level-card-footer';
@@ -1281,23 +1404,24 @@ body.stage-immersive{overflow:hidden}
     for(const [min,name] of rankLadder){if(xp>=min)rank=name;}
     for(const [min] of rankLadder){if(xp<min){nextAt=min;break;}}
     $('rankTitle').textContent=rank;$('topRank').textContent=rank.replace('Agency ','');$('xpCount').textContent=xp+' XP';
+    const ladderView=$('rankLadderView');if(ladderView){ladderView.innerHTML='';rankLadder.forEach(([min,name])=>{const chip=document.createElement('span');chip.className='rank-step'+(xp>=min?' done':'')+(name===rank?' current':'');chip.textContent=min+' · '+name;ladderView.appendChild(chip);});}
     if(nextAt===null){$('xpFill').style.width='100%';$('xpNext').textContent='MAX RANK';return;}
     const prev=rankLadder.filter(([min])=>min<=xp).pop()[0];
     $('xpFill').style.width=Math.round(((xp-prev)/(nextAt-prev))*100)+'%';
     $('xpNext').textContent=xp+' / '+nextAt;
   }
-  const starTargets={1:6,2:8,3:10,4:10,5:12,6:10,7:14,8:16,9:17,10:18,11:11,12:16,13:14,14:18,15:25,16:23,17:12,18:22,19:24,20:30,21:9,22:13,23:18,24:17,25:19,26:8,27:11,28:11,29:12,30:15,31:13,32:16,33:18,34:19,35:33,36:7,37:7,38:10,39:10,40:18,41:13,42:22,43:23,44:19,45:16,46:16,47:19,48:11,49:11,50:26,51:10,52:18,53:12,54:13,55:24,56:9,57:13,58:17,59:13,60:15};
+  const starTargets={1:5,2:7,3:8,4:9,5:10,6:9,7:13,8:15,9:16,10:16,11:8,12:16,13:11,14:15,15:21,16:22,17:11,18:21,19:22,20:29,21:7,22:11,23:16,24:15,25:16,26:7,27:10,28:10,29:10,30:14,31:12,32:11,33:15,34:17,35:36,36:6,37:6,38:6,39:7,40:21,41:7,42:12,43:19,44:11,45:19,46:9,47:11,48:8,49:9,50:25,51:7,52:14,53:11,54:12,55:26,56:7,57:9,58:10,59:12,60:19};
   function codeLines(src){
     return String(src||'').split('\n').filter(l=>{const t=l.trim();return t!==''&&!t.startsWith('#');}).length;
   }
-  function scoreRun(levelId,actions,lines,firstTry){
+  function scoreRun(levelId,actions,lines,allIntel){
     const lv=levels.find(l=>l.id===levelId)||{};
     const moveTarget=starTargets[levelId]||12;
     const lineLimit=lv.lines||99;
     const moves=actions<=moveTarget;
     const neat=lines<=lineLimit;
-    const fresh=!!firstTry;
-    return {moves,neat,fresh,stars:(moves?1:0)+(neat?1:0)+(fresh?1:0),moveTarget,lineLimit};
+    const heist=!!allIntel;
+    return {moves,neat,heist,stars:(moves?1:0)+(neat?1:0)+(heist?1:0),moveTarget,lineLimit};
   }
   function registerAttempt(){
     const key=String(currentLevel().id);
@@ -1305,12 +1429,12 @@ body.stage-immersive{overflow:hidden}
     result.attempts=(Number.isFinite(result.attempts)?result.attempts:0)+1;
     profile.results[key]=result;saveProfile();renderLevelCards();
   }
-  function recordPerformance(actions,lines,firstTry){
+  function recordPerformance(actions,lines,allIntel){
     const key=String(currentLevel().id);
     const result=profile.results[key]&&typeof profile.results[key]==='object'?profile.results[key]:{attempts:0,bestStars:0,bestActions:null};
-    const score=scoreRun(currentLevel().id,actions,lines,firstTry);
+    const score=scoreRun(currentLevel().id,actions,lines,allIntel);
     result.lastActions=actions;result.lastStars=score.stars;result.cleared=true;
-    result.lastMoves=score.moves;result.lastNeat=score.neat;result.lastFirst=score.fresh;
+    result.lastMoves=score.moves;result.lastNeat=score.neat;result.lastHeist=score.heist;
     if(!Number.isFinite(result.bestActions)||actions<result.bestActions)result.bestActions=actions;
     if(!Number.isFinite(result.bestLines)||lines<result.bestLines)result.bestLines=lines;
     result.bestStars=Math.max(result.bestStars||0,score.stars);
@@ -1320,14 +1444,14 @@ body.stage-immersive{overflow:hidden}
   function renderCommands(){
     const commands=[
       {code:'agent.step(1)',desc:'Step forward one tile'},
-      {code:'agent.collect()',desc:'Collect an item here'}
+      {code:'# chips are picked up automatically — plan the route over them',desc:'No collect command needed'}
     ];
     if(currentIndex>=5){
       commands.push({code:'agent.turn("left")',desc:'Turn 90° left'});
       commands.push({code:'agent.turn("right")',desc:'Turn 90° right'});
     }
     if(currentIndex>=10)commands.push({code:'for i in range(3):\n    agent.step(1)',desc:'Loop: repeat steps'});
-    if(currentIndex>=15)commands.push({code:'if agent.wall_ahead():\n    agent.turn("left")\n    agent.step(1)\nelse:\n    agent.step(1)',desc:'Check ahead and choose a route'});
+    if(currentIndex>=15)commands.push({code:'if agent.wall_ahead():\n    agent.turn("left")\n    agent.step(1)',desc:'Check ahead and detour only if blocked'});
     if(currentIndex>=20)commands.push({code:'agent.interact()',desc:'Open a nearby lock'});
     if(currentIndex>=25)commands.push({code:'if agent.camera_ahead():\n    agent.disable_camera()',desc:'Detect and disable a camera'});
     if(currentIndex>=30)commands.push({code:'def advance():\n    agent.step(1)\n\nadvance()',desc:'Function: reuse a code block'});
@@ -1481,7 +1605,7 @@ body.stage-immersive{overflow:hidden}
     else{el.textContent=count+' LINE'+(count===1?'':'S');el.classList.remove('over-limit');}
     $('lineNumbers').scrollTop=editor.scrollTop;
     const chip=$('missionLimit');
-    if(chip&&lv)chip.textContent='★ ≤'+(starTargets[lv.id]||12)+' ACTIONS · ★ ≤'+(limit||'?')+' LINES · ★ FIRST TRY';
+    if(chip&&lv)chip.textContent='★ ≤'+(starTargets[lv.id]||12)+' ACTIONS · ★ ≤'+(limit||'?')+' LINES · ★ ALL INTEL';
     const reqChip=$('missionReq');
     if(reqChip){ if(lv&&lv.req){reqChip.hidden=false;reqChip.textContent='⚑ HQ REQUIREMENT · USE '+lv.req;} else {reqChip.hidden=true;reqChip.textContent='';} }
   }
@@ -1511,103 +1635,212 @@ body.stage-immersive{overflow:hidden}
   function doorOpen(door){return world.openDoors.has(door.id);}
   function blockedAt(x,y){const d=doorAt(x,y);return wallAt(x,y)||(d&&!doorOpen(d));}
 
+  /* ===== OFFICE RENDERER (2D top-down + 3D isometric) ===== */
+  let viewMode='2d';
+  let animT=0;
+  let panX=0,panY=0,zoom=1;   /* 3D camera offset */
+  const pulse=()=>0.5+0.5*Math.sin(animT/420);
+  function tileHash(x,y,salt){let h=(x*73856093)^(y*19349663)^((currentLevel().id+ (salt||0))*83492791);h=(h^(h>>>13))>>>0;return h;}
   function drawMap(){
     if(!world)return;
+    if(viewMode==='3d')drawMap3D();else drawMap2D();
+    updateReadout();
+  }
+  function center(x,y){return{x:x*CELL+CELL/2,y:y*CELL+CELL/2};}
+
+  function drawMap2D(){
     fitBoardToStage();
     const lv=currentLevel(),dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
     const w=lv.cols*CELL,h=lv.rows*CELL;
     canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.aspectRatio=lv.cols+'/'+lv.rows;
     ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
-    ctx.fillStyle='#08141b';ctx.fillRect(0,0,w,h);
+    ctx.fillStyle='#0a1219';ctx.fillRect(0,0,w,h);
+    // Floor + office furniture
     for(let y=0;y<lv.rows;y++)for(let x=0;x<lv.cols;x++){
-      const px=x*CELL,py=y*CELL,isWall=wallAt(x,y);
-      ctx.fillStyle=isWall?'#14232d':((x+y)%2===0?'#0d1b23':'#0b1820');ctx.fillRect(px,py,CELL,CELL);
-      ctx.strokeStyle=isWall?'rgba(81,111,123,.26)':'rgba(96,137,148,.14)';ctx.lineWidth=1;ctx.strokeRect(px+.5,py+.5,CELL-1,CELL-1);
-      if(isWall)drawWall(px,py);
-      else {ctx.fillStyle='rgba(114,160,169,.16)';ctx.beginPath();ctx.arc(px+8,py+8,1.2,0,Math.PI*2);ctx.fill();}
+      const px=x*CELL,py=y*CELL,isWall=wallAt(x,y),border=x===0||y===0||x===lv.cols-1||y===lv.rows-1;
+      if(border&&!isWall){ctx.fillStyle='#131e28';ctx.fillRect(px,py,CELL,CELL);ctx.fillStyle='rgba(90,120,132,.12)';ctx.fillRect(px,py,CELL,2);}
+      else if(isWall){drawWall(px,py);}
+      else{
+        ctx.fillStyle=((x+y)%2===0)?'#101d27':'#0e1a23';ctx.fillRect(px,py,CELL,CELL);
+        ctx.strokeStyle='rgba(96,137,148,.09)';ctx.lineWidth=1;ctx.strokeRect(px+.5,py+.5,CELL-1,CELL-1);
+      }
     }
-    // Camera cones and their watched floor cells.
+    // Laser cones + watched tiles
     lv.cameras.forEach(cam=>{
       const disabled=world.disabledCameras.has(cam.id);
-      if(disabled)return;
-      const c=center(cam.x,cam.y);
       cam.danger.forEach(cell=>{
         const px=cell.x*CELL,py=cell.y*CELL;
-        ctx.fillStyle='rgba(218,58,73,.19)';ctx.fillRect(px+2,py+2,CELL-4,CELL-4);
-        ctx.strokeStyle='rgba(255,108,117,.55)';ctx.setLineDash([4,4]);ctx.lineWidth=1.2;ctx.strokeRect(px+4,py+4,CELL-8,CELL-8);ctx.setLineDash([]);
-        ctx.fillStyle='rgba(255,118,126,.5)';ctx.font='9px Arial';ctx.textAlign='center';ctx.fillText('RISK',px+CELL/2,py+CELL-7);
+        if(disabled){ctx.fillStyle='rgba(120,140,148,.07)';ctx.fillRect(px+3,py+3,CELL-6,CELL-6);return;}
+        const a=0.16+0.12*pulse();
+        ctx.fillStyle='rgba(230,60,74,'+a+')';ctx.fillRect(px+2,py+2,CELL-4,CELL-4);
+        ctx.strokeStyle='rgba(255,96,108,'+(0.5+0.3*pulse())+')';ctx.lineWidth=1.1;
+        ctx.beginPath();ctx.moveTo(px+3,py+CELL/2);ctx.lineTo(px+CELL-3,py+CELL/2);ctx.moveTo(px+CELL/2,py+3);ctx.lineTo(px+CELL/2,py+CELL-3);ctx.stroke();
+        ctx.setLineDash([3,3]);ctx.strokeRect(px+4,py+4,CELL-8,CELL-8);ctx.setLineDash([]);
       });
-      const target=cam.danger[0];if(target){
-        const t=center(target.x,target.y);ctx.save();ctx.beginPath();ctx.moveTo(c.x,c.y);ctx.lineTo(t.x-7,t.y-7);ctx.lineTo(t.x+7,t.y+7);ctx.closePath();ctx.fillStyle='rgba(255,83,98,.055)';ctx.fill();ctx.restore();
+      const t=cam.danger[0];
+      if(t&&!disabled){
+        const c=center(cam.x,cam.y),tc=center(t.x,t.y);
+        const g=ctx.createLinearGradient(c.x,c.y,tc.x,tc.y);
+        g.addColorStop(0,'rgba(255,70,86,'+(0.30+0.18*pulse())+')');g.addColorStop(1,'rgba(255,70,86,0.04)');
+        ctx.strokeStyle=g;ctx.lineWidth=1.6;ctx.beginPath();ctx.moveTo(c.x,c.y);ctx.lineTo(tc.x,tc.y);ctx.stroke();
+        ctx.lineWidth=4;ctx.strokeStyle='rgba(255,70,86,0.07)';ctx.beginPath();ctx.moveTo(c.x,c.y);ctx.lineTo(tc.x,tc.y);ctx.stroke();
       }
     });
-    // Exit zone
-    const ex=lv.exit,cx=ex.x*CELL+CELL/2,cy=ex.y*CELL+CELL/2;
-    ctx.save();ctx.shadowColor='rgba(83,231,197,.5)';ctx.shadowBlur=15;ctx.strokeStyle='rgba(83,231,197,.83)';ctx.lineWidth=1.3;
-    ctx.beginPath();ctx.arc(cx,cy,22,0,Math.PI*2);ctx.stroke();ctx.shadowBlur=0;
-    ctx.strokeStyle='rgba(83,231,197,.4)';ctx.beginPath();ctx.arc(cx,cy,15,0,Math.PI*2);ctx.stroke();
-    ctx.fillStyle='rgba(40,162,138,.14)';ctx.beginPath();ctx.arc(cx,cy,11,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#8bf8d8';ctx.font='bold 9px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='center';ctx.fillText('EX',cx,cy+3);ctx.restore();
-    // Doors
+    // Exit = collection point
+    const ex=lv.exit,exx=ex.x*CELL,exy=ex.y*CELL;
+    ctx.save();ctx.shadowColor='rgba(83,231,197,.7)';ctx.shadowBlur=8+4*pulse();
+    ctx.fillStyle='#0f3a30';ctx.fillRect(exx+3,exy+3,CELL-6,CELL-6);ctx.restore();
+    ctx.strokeStyle='#57e6b8';ctx.lineWidth=1.6;ctx.strokeRect(exx+3,exy+3,CELL-6,CELL-6);
+    ctx.fillStyle='#8bf8d8';ctx.font='bold 9px Arial';ctx.textAlign='center';ctx.fillText('EX',exx+CELL/2,exy+CELL/2+3);
+    // Doors = security gates
     lv.doors.forEach(d=>{
-      const px=d.x*CELL,py=d.y*CELL;
-      if(doorOpen(d)){
-        ctx.strokeStyle='rgba(99,242,193,.6)';ctx.lineWidth=2;ctx.setLineDash([3,3]);ctx.strokeRect(px+5,py+5,CELL-10,CELL-10);ctx.setLineDash([]);
-        ctx.fillStyle='rgba(44,146,113,.08)';ctx.fillRect(px+5,py+5,CELL-10,CELL-10);
-        ctx.fillStyle='rgba(99,242,193,.7)';ctx.font='8px '+getComputedStyle(document.body).fontFamily;ctx.textAlign='center';ctx.fillText('OPEN',px+CELL/2,py+CELL-8);
-      }else{
-        const g=ctx.createLinearGradient(px+8,py,px+CELL-8,py);g.addColorStop(0,'#79582d');g.addColorStop(.5,'#d9a347');g.addColorStop(1,'#79582d');
-        ctx.fillStyle=g;ctx.fillRect(px+13,py+7,CELL-26,CELL-14);ctx.strokeStyle='rgba(255,214,132,.72)';ctx.lineWidth=1;ctx.strokeRect(px+13.5,py+7.5,CELL-27,CELL-15);
-        ctx.fillStyle='#192129';ctx.beginPath();ctx.arc(px+CELL/2,py+CELL/2,4,Math.PI,0);ctx.lineTo(px+CELL/2+4,py+CELL/2+6);ctx.lineTo(px+CELL/2-4,py+CELL/2+6);ctx.closePath();ctx.fill();
-        ctx.fillStyle='#ffd37d';ctx.font='8px Arial';ctx.textAlign='center';ctx.fillText('LOCK',px+CELL/2,py+CELL-3);
-      }
+      const px=d.x*CELL,py=d.y*CELL,open=doorOpen(d);
+      ctx.fillStyle='#101a22';ctx.fillRect(px+4,py+4,CELL-8,CELL-8);
+      ctx.strokeStyle=open?'rgba(99,242,193,.5)':'rgba(255,170,90,.4)';ctx.lineWidth=1;
+      for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(px+4+i*(CELL-8)/4,py+6);ctx.lineTo(px+4+i*(CELL-8)/4,py+CELL-6);ctx.stroke();}
+      if(open){ctx.setLineDash([3,3]);ctx.strokeStyle='rgba(99,242,193,.6)';ctx.strokeRect(px+5,py+5,CELL-10,CELL-10);ctx.setLineDash([]);}
+      const led=open?'#63f2c1':'#ff5f6b';
+      ctx.save();ctx.shadowColor=led;ctx.shadowBlur=open?6:6+4*pulse();ctx.fillStyle=led;ctx.beginPath();ctx.arc(px+CELL-9,py+9,2.6,0,Math.PI*2);ctx.fill();ctx.restore();
     });
-    // Collectibles
+    // Items
     world.items.forEach(item=>drawItem(item));
-    // Cameras
+    // Camera devices
     lv.cameras.forEach(cam=>drawCamera(cam,world.disabledCameras.has(cam.id)));
     drawAgent(world.player);
-    updateReadout();
   }
-  function center(x,y){return{x:x*CELL+CELL/2,y:y*CELL+CELL/2};}
   function drawWall(px,py){
-    ctx.fillStyle='rgba(8,15,21,.35)';ctx.fillRect(px+5,py+5,CELL-10,CELL-10);
-    ctx.strokeStyle='rgba(100,128,139,.15)';ctx.lineWidth=1;
-    for(let i=-CELL;i<CELL*2;i+=12){ctx.beginPath();ctx.moveTo(px+i,py+CELL-2);ctx.lineTo(px+i+CELL,py+2);ctx.stroke();}
-    ctx.fillStyle='rgba(126,151,159,.36)';ctx.fillRect(px+9,py+9,4,4);
+    ctx.fillStyle='#1d2b37';ctx.fillRect(px,py,CELL,CELL);
+    ctx.fillStyle='#2c4050';ctx.fillRect(px,py,CELL,3);
+    ctx.strokeStyle='rgba(140,170,182,.22)';ctx.lineWidth=1;ctx.strokeRect(px+.5,py+.5,CELL-1,CELL-1);
   }
   function drawItem(item){
-    const c=center(item.x,item.y);ctx.save();ctx.shadowBlur=12;ctx.textAlign='center';ctx.textBaseline='middle';
+    const c=center(item.x,item.y);ctx.save();ctx.textAlign='center';ctx.textBaseline='middle';
     if(item.type==='intel'){
-      ctx.shadowColor='rgba(255,198,109,.48)';ctx.translate(c.x,c.y);ctx.rotate(Math.PI/4);ctx.fillStyle='#ffc66d';ctx.fillRect(-10,-10,20,20);ctx.fillStyle='#fff1c8';ctx.fillRect(-4,-4,8,8);ctx.restore();
-      ctx.fillStyle='#f8d894';ctx.font='8px Arial';ctx.textAlign='center';ctx.fillText('DATA',c.x,c.y+24);return;
+      const g=0.65+0.35*pulse();
+      ctx.shadowColor='rgba(103,232,249,'+(0.5*g)+')';ctx.shadowBlur=14;
+      ctx.fillStyle='#0e3b44';ctx.fillRect(c.x-11,c.y-8,22,16);
+      ctx.strokeStyle='rgba(103,232,249,.95)';ctx.lineWidth=1.3;ctx.strokeRect(c.x-11,c.y-8,22,16);
+      ctx.fillStyle='#67e8f9';ctx.fillRect(c.x-6,c.y-4,12,8);
+      ctx.fillStyle='rgba(103,232,249,'+(0.55+0.4*pulse())+')';
+      for(let i=0;i<4;i++){ctx.fillRect(c.x-9+i*5.5,c.y-11,2,3);ctx.fillRect(c.x-9+i*5.5,c.y+8,2,3);}
+      ctx.restore();return;
     }
-    ctx.shadowColor='rgba(117,185,255,.45)';ctx.fillStyle='#75b9ff';ctx.beginPath();ctx.arc(c.x,c.y-2,10,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle='#10222d';ctx.beginPath();ctx.arc(c.x,c.y-2,4,0,Math.PI*2);ctx.fill();
-    ctx.strokeStyle='#75b9ff';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(c.x+6,c.y+3);ctx.lineTo(c.x+15,c.y+12);ctx.lineTo(c.x+12,c.y+15);ctx.moveTo(c.x+11,c.y+10);ctx.lineTo(c.x+8,c.y+13);ctx.stroke();
-    ctx.restore();ctx.fillStyle='#abd6ff';ctx.font='8px Arial';ctx.textAlign='center';ctx.fillText('TAG',c.x,c.y+24);
+    ctx.shadowColor='rgba(255,205,105,.5)';ctx.shadowBlur=10;
+    ctx.fillStyle='#e8b64c';ctx.fillRect(c.x-12,c.y-8,24,16);
+    ctx.fillStyle='#3a2f14';ctx.fillRect(c.x-12,c.y-8,7,16);
+    ctx.fillStyle='rgba(255,240,200,.9)';ctx.fillRect(c.x-2,c.y-2,10,4);
+    ctx.restore();
   }
   function drawCamera(cam,disabled){
-    const c=center(cam.x,cam.y);ctx.save();ctx.translate(c.x,c.y);ctx.rotate(cam.dir==='down'?Math.PI/2:cam.dir==='left'?Math.PI:cam.dir==='up'?-Math.PI/2:0);
-    ctx.shadowColor=disabled?'transparent':'rgba(255,102,110,.35)';ctx.shadowBlur=disabled?0:11;
-    ctx.fillStyle=disabled?'#425660':'#a7434b';ctx.strokeStyle=disabled?'#93a5aa':'#ff9296';ctx.lineWidth=1.2;
-    ctx.beginPath();ctx.roundRect(-14,-9,23,18,5);ctx.fill();ctx.stroke();
-    ctx.fillStyle=disabled?'#273740':'#25171c';ctx.beginPath();ctx.arc(8,0,5.5,0,Math.PI*2);ctx.fill();ctx.stroke();
-    ctx.fillStyle=disabled?'#667b83':'#ff9090';ctx.beginPath();ctx.arc(8,0,2.1,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=disabled?'#71858c':'#dd747a';ctx.fillRect(-10,8,4,5);ctx.fillRect(1,8,4,5);
-    ctx.restore();ctx.fillStyle=disabled?'#8ca1a5':'#efabb0';ctx.font='8px Arial';ctx.textAlign='center';ctx.fillText(disabled?'OFF':'CAM',c.x,c.y+25);
+    const c=center(cam.x,cam.y);ctx.save();
+    ctx.fillStyle='rgba(0,0,0,.35)';ctx.beginPath();ctx.ellipse(c.x+2,c.y+4,12,6,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#242f38';ctx.beginPath();ctx.arc(c.x,c.y,11,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='rgba(160,185,195,.4)';ctx.lineWidth=1.2;ctx.stroke();
+    ctx.fillStyle=disabled?'#3a4a52':'#1a1216';ctx.beginPath();ctx.arc(c.x,c.y,6.5,0,Math.PI*2);ctx.fill();
+    if(!disabled){
+      ctx.shadowColor='rgba(255,60,72,.9)';ctx.shadowBlur=8+5*pulse();
+      ctx.fillStyle='#ff4452';ctx.beginPath();ctx.arc(c.x,c.y,2.6,0,Math.PI*2);ctx.fill();
+    }else{ctx.fillStyle='#6d828b';ctx.beginPath();ctx.arc(c.x,c.y,2.2,0,Math.PI*2);ctx.fill();}
+    ctx.restore();
   }
   function drawAgent(p){
-    const c=center(p.x,p.y);ctx.save();ctx.shadowColor='rgba(99,242,193,.65)';ctx.shadowBlur=17;
-    const grad=ctx.createRadialGradient(c.x-3,c.y-5,2,c.x,c.y,20);grad.addColorStop(0,'#62efc0');grad.addColorStop(1,'#147968');
-    ctx.fillStyle=grad;ctx.beginPath();ctx.arc(c.x,c.y,17,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
-    ctx.strokeStyle='rgba(206,255,238,.85)';ctx.lineWidth=1.2;ctx.stroke();
-    // Tiny top-down agent silhouette.
-    ctx.fillStyle='#08231f';ctx.beginPath();ctx.arc(c.x,c.y-4,4.4,0,Math.PI*2);ctx.fill();
-    ctx.beginPath();ctx.ellipse(c.x,c.y+5,7.5,5.5,0,Math.PI,Math.PI*2);ctx.fill();
+    const c=center(p.x,p.y);ctx.save();
+    ctx.fillStyle='rgba(0,0,0,.4)';ctx.beginPath();ctx.ellipse(c.x+2,c.y+6,13,6,0,0,Math.PI*2);ctx.fill();
+    ctx.shadowColor='rgba(99,242,193,.55)';ctx.shadowBlur=12;
+    ctx.fillStyle='#16333b';ctx.beginPath();ctx.arc(c.x,c.y,13,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+    ctx.strokeStyle='rgba(99,242,193,.8)';ctx.lineWidth=1.4;ctx.stroke();
+    ctx.fillStyle='#0d2126';ctx.beginPath();ctx.arc(c.x,c.y-3,5,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#28454d';ctx.beginPath();ctx.ellipse(c.x,c.y+5,8,5.5,0,Math.PI,Math.PI*2);ctx.fill();
     const [dx,dy]=directions[p.facing]||directions.right;
-    ctx.fillStyle='#eafff5';ctx.beginPath();ctx.moveTo(c.x+dx*22,c.y+dy*22);ctx.lineTo(c.x+dx*13-dy*4,c.y+dy*13+dx*4);ctx.lineTo(c.x+dx*13+dy*4,c.y+dy*13-dx*4);ctx.closePath();ctx.fill();
+    ctx.fillStyle='#7dfad2';ctx.beginPath();ctx.moveTo(c.x+dx*22,c.y+dy*22);ctx.lineTo(c.x+dx*13-dy*4.4,c.y+dy*13+dx*4.4);ctx.lineTo(c.x+dx*13+dy*4.4,c.y+dy*13-dx*4.4);ctx.closePath();ctx.fill();
     ctx.restore();
+  }
+
+  /* --- 3D isometric view --- */
+  function drawMap3D(){
+    fitBoardToStage();
+    const lv=currentLevel(),dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+    const TW=CELL,TH=CELL*0.5,WH=CELL*0.62;
+    const w=(lv.cols+lv.rows)*TW/2,h=(lv.cols+lv.rows)*TH/2+WH+CELL*0.4;
+    canvas.width=w*dpr;canvas.height=h*dpr;canvas.style.aspectRatio=w+'/'+h;
+    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+    ctx.fillStyle='#0a1219';ctx.fillRect(0,0,w,h);
+    ctx.save();ctx.translate(panX,panY);ctx.scale(zoom,zoom);
+    const ox=lv.rows*TW/2, oy=WH+CELL*0.15;
+    const iso=(x,y)=>({X:ox+(x-y)*TW/2, Y:oy+(x+y)*TH/2});
+    const diamond=(X,Y,fill,stroke)=>{ctx.beginPath();ctx.moveTo(X,Y);ctx.lineTo(X+TW/2,Y+TH/2);ctx.lineTo(X,Y+TH);ctx.lineTo(X-TW/2,Y+TH/2);ctx.closePath();if(fill){ctx.fillStyle=fill;ctx.fill();}if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke();}};
+    const box=(X,Y,top,left,right,hgt)=>{
+      const hh=hgt==null?WH:hgt;
+      ctx.fillStyle=left;ctx.beginPath();ctx.moveTo(X-TW/2,Y+TH/2);ctx.lineTo(X,Y+TH);ctx.lineTo(X,Y+TH-hh);ctx.lineTo(X-TW/2,Y+TH/2-hh);ctx.closePath();ctx.fill();
+      ctx.fillStyle=right;ctx.beginPath();ctx.moveTo(X+TW/2,Y+TH/2);ctx.lineTo(X,Y+TH);ctx.lineTo(X,Y+TH-hh);ctx.lineTo(X+TW/2,Y+TH/2-hh);ctx.closePath();ctx.fill();
+      diamond(X,Y-hh,top,'rgba(0,0,0,.25)');
+    };
+    for(let sum=0;sum<=lv.cols+lv.rows-2;sum++){
+      for(let x=Math.max(0,sum-(lv.rows-1));x<=Math.min(lv.cols-1,sum);x++){
+        const y=sum-x, px=x, py=y, P=iso(px,py);
+        const border=px===0||py===0||px===lv.cols-1||py===lv.rows-1;
+        const isWall=wallAt(px,py);
+        if(border&&!isWall){diamond(P.X,P.Y,'#141f29','rgba(90,120,132,.15)');}
+        else if(isWall){
+          box(P.X,P.Y,'#33475a','#22303c','#1a252e');
+        }else{
+          diamond(P.X,P.Y,((px+py)%2===0)?'#122130':'#101d29','rgba(96,137,148,.10)');
+          const exT=lv.exit;
+          if(px===exT.x&&py===exT.y){
+            diamond(P.X,P.Y,'rgba(87,230,184,'+(0.22+0.14*pulse())+')','rgba(120,255,214,.75)');
+            ctx.fillStyle='#8bf8d8';ctx.font='bold 9px Arial';ctx.textAlign='center';ctx.fillText('EX',P.X,P.Y-6);
+          }
+          const door=lv.doors.find(d=>d.x===px&&d.y===py);
+          if(door){
+            const open=doorOpen(door);
+            box(P.X,P.Y,open?'rgba(38,74,63,.9)':'#4a3a22',open?'#234a3f':'#33281a',open?'#1b3a31':'#241c12',CELL*0.42);
+            ctx.save();ctx.shadowColor=open?'#63f2c1':'#ff5f6b';ctx.shadowBlur=7;
+            ctx.fillStyle=open?'#63f2c1':'#ff5f6b';ctx.beginPath();ctx.arc(P.X,P.Y-CELL*0.5,2.4,0,Math.PI*2);ctx.fill();ctx.restore();
+          }
+          const cam=lv.cameras.find(cm=>cm.x===px&&cm.y===py);
+          if(cam){
+            const disabled=world.disabledCameras.has(cam.id);
+            cam.danger.forEach(t=>{
+              const T=iso(t.x,t.y);
+              diamond(T.X,T.Y,disabled?'rgba(120,140,148,.08)':'rgba(230,60,74,'+(0.2+0.14*pulse())+')',disabled?'rgba(120,140,148,.2)':'rgba(255,96,108,.8)');
+              if(!disabled){ctx.strokeStyle='rgba(255,70,86,'+(0.5+0.3*pulse())+')';ctx.lineWidth=1.4;ctx.beginPath();ctx.moveTo(P.X,P.Y-CELL*0.7);ctx.lineTo(T.X,T.Y+TH/2);ctx.stroke();}
+            });
+            ctx.strokeStyle='#45525c';ctx.lineWidth=2.4;ctx.beginPath();ctx.moveTo(P.X,P.Y+TH/2);ctx.lineTo(P.X,P.Y-CELL*0.62);ctx.stroke();
+            ctx.fillStyle='#242f38';ctx.beginPath();ctx.arc(P.X,P.Y-CELL*0.7,6,0,Math.PI*2);ctx.fill();
+            ctx.strokeStyle='rgba(160,185,195,.4)';ctx.lineWidth=1;ctx.stroke();
+            ctx.fillStyle=disabled?'#6d828b':'#ff4452';ctx.beginPath();ctx.arc(P.X,P.Y-CELL*0.7,2,0,Math.PI*2);ctx.fill();
+          }
+          const item=world.items.find(it=>it.x===px&&it.y===py);
+          if(item){
+            const bob=Math.sin(animT/380+px)*2;
+            if(item.type==='intel'){
+              ctx.save();ctx.shadowColor='rgba(103,232,249,.8)';ctx.shadowBlur=10;
+              ctx.fillStyle='#0e3b44';ctx.fillRect(P.X-8,P.Y-CELL*0.5+bob,16,11);
+              ctx.strokeStyle='#67e8f9';ctx.lineWidth=1.2;ctx.strokeRect(P.X-8,P.Y-CELL*0.5+bob,16,11);
+              ctx.fillStyle='#67e8f9';ctx.fillRect(P.X-4,P.Y-CELL*0.5+3+bob,8,5);ctx.restore();
+            }else{
+              ctx.save();ctx.shadowColor='rgba(255,205,105,.7)';ctx.shadowBlur=9;
+              ctx.fillStyle='#e8b64c';ctx.fillRect(P.X-9,P.Y-CELL*0.48+bob,18,11);
+              ctx.fillStyle='#3a2f14';ctx.fillRect(P.X-9,P.Y-CELL*0.48+bob,5,11);ctx.restore();
+            }
+          }
+          if(world.player.x===px&&world.player.y===py){
+            const bob=Math.sin(animT/300)*1.4;
+            ctx.fillStyle='rgba(0,0,0,.4)';ctx.beginPath();ctx.ellipse(P.X,P.Y+TH/2,10,4.4,0,0,Math.PI*2);ctx.fill();
+            ctx.save();ctx.shadowColor='rgba(99,242,193,.6)';ctx.shadowBlur=10;
+            ctx.fillStyle='#16333b';ctx.beginPath();ctx.ellipse(P.X,P.Y-CELL*0.32+bob,7.5,10,0,0,Math.PI*2);ctx.fill();
+            ctx.fillStyle='#0d2126';ctx.beginPath();ctx.arc(P.X,P.Y-CELL*0.55+bob,5,0,Math.PI*2);ctx.fill();ctx.restore();
+            ctx.strokeStyle='rgba(99,242,193,.9)';ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(P.X,P.Y-CELL*0.32+bob,8.6,0,Math.PI*2);ctx.stroke();
+            const [dx,dy]=directions[world.player.facing]||directions.right;
+            const ax=(dx-dy)*TW*0.24, ay=(dx+dy)*TH*0.24;
+            ctx.fillStyle='#7dfad2';ctx.beginPath();ctx.moveTo(P.X+ax*1.6,P.Y-CELL*0.3+ay*1.6);ctx.lineTo(P.X+ax-ay*0.4,P.Y-CELL*0.3+ay+ax*0.2);ctx.lineTo(P.X+ax+ay*0.4,P.Y-CELL*0.3+ay-ax*0.2);ctx.closePath();ctx.fill();
+          }
+        }
+      }
+    }
+    ctx.restore();
+    ctx.fillStyle='rgba(140,170,182,.5)';ctx.font='8px monospace';ctx.textAlign='left';
+    ctx.fillText('DRAG: PAN \u00b7 SCROLL: ZOOM \u00b7 DOUBLE-CLICK: RESET',8,h-8);
   }
 
   const delay=ms=>new Promise(resolve=>setTimeout(resolve,ms));
@@ -1637,14 +1870,21 @@ body.stage-immersive{overflow:hidden}
         addLog('Alarm! You entered the camera’s field of view. Try disabling it first.','error');world.failed=true;state.halted=true;setMapStatus('Movement detected','error');return;
       }
       const ex=currentLevel().exit;
-      if(nx===ex.x&&ny===ex.y&&!world.inventory.has('intel')){
-        addLog('Extraction is waiting—the intel package has not been collected yet.','warn');world.failed=true;state.halted=true;setMapStatus('Intel missing','error');return;
-      }
       world.player.x=nx;world.player.y=ny;drawMap();setMapStatus('Agent moving','running');
       addLog('One step '+({right:'right',left:'left',up:'up',down:'down'}[dir])+'.');
       await delay(250);
       if(nx===ex.x&&ny===ex.y){await completeMission(state);}
       return;
+    }
+    if(name==='pickup'){
+      const types=Array.isArray(args)?args:[];
+      for(const type of types){
+        const item=world.items.find(it=>it.type===type);
+        if(item){world.items=world.items.filter(other=>other!==item);world.inventory.add(item.type);}
+        addLog('Picked up: '+(type==='intel'?'data chip':type)+'.','success');
+        await teachIfNew(type);
+      }
+      drawMap();await delay(170);return;
     }
     if(name==='collect'){
       const here=world.items.filter(item=>item.x===world.player.x&&item.y===world.player.y);
@@ -1674,7 +1914,7 @@ body.stage-immersive{overflow:hidden}
   async function completeMission(state){
     if(world.complete)return;
     world.complete=true;state.halted=true;
-    const score=recordPerformance(state.actions,state.lines,state.firstTry);
+    const score=recordPerformance(state.actions,state.lines,state.allIntel);
     const stars=score.stars;
     const firstTime=!profile.completed.includes(currentLevel().id);
     if(firstTime){profile.completed.push(currentLevel().id);profile.completed.sort((a,b)=>a-b);saveProfile();}
@@ -1682,7 +1922,7 @@ body.stage-immersive{overflow:hidden}
     $('winTitle').textContent=currentIndex===levels.length-1?'Training complete!':'Mission complete';
     $('winSub').textContent=(firstTime?'+100 XP · ':'REPLAY · ')+'★'.repeat(stars)+'☆'.repeat(3-stars)+' · '+state.actions+' actions · '+state.lines+' lines';
     const chip=(ok,label)=>(ok?'✓ ':'✗ ')+label;
-    $('winDetail').textContent=[chip(score.moves,'moves ≤'+score.moveTarget),chip(score.neat,'lines ≤'+score.lineLimit),chip(score.fresh,'first try')].join('   ');
+    $('winDetail').textContent=[chip(score.moves,'moves ≤'+score.moveTarget),chip(score.neat,'lines ≤'+score.lineLimit),chip(score.heist,'all intel '+state.intelGot+'/'+state.intelTotal)].join('   ');
     $('nextBtn').style.display=currentIndex<levels.length-1?'':'none';
     $('winBanner').hidden=false;
     addLog(firstTime?'Objective complete. +100 XP added to your agent profile.':'Objective complete. Great work on the replay.','success');
@@ -1692,21 +1932,15 @@ body.stage-immersive{overflow:hidden}
   async function runProgram(){
     if(busy)return;
     saveCurrentCode();updateEditorMeta();clearConsole();createWorld();
-    const priorResult=profile.results[String(currentLevel().id)];
-    const firstTry=!(priorResult&&priorResult.attempts>=1);
     registerAttempt();
     busy=true;updateButtons();$('consoleState').textContent='● CPYTHON 3';
     setMapStatus('Sending code to CPython 3','running');
     addLog('Submitting your program to the isolated CPython 3 runtime…','system');
-    const state={halted:false,actions:0,lines:codeLines(editor.value),firstTry};
+    const state={halted:false,actions:0,lines:codeLines(editor.value),intelGot:0,intelTotal:0,allIntel:false};
     try{
-      const response=await fetch('/api/run',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({code:editor.value,levelId:currentLevel().id})
-      });
-      const data=await response.json();
-      if(!response.ok)throw new Error(data.error||('HTTP '+response.status));
+      const data=await runSandbox(editor.value,currentLevel().id);
       state.actions=Number(data.actions)||0;
+      state.intelGot=Number(data.intelGot)||0;state.intelTotal=Number(data.intelTotal)||0;state.allIntel=state.intelTotal>0?state.intelGot>=state.intelTotal:true;
       if(!data.ok){
         addLog(data.error||'Python could not run this program.','error');
         setMapStatus('Python error','error');$('consoleState').textContent='● PYTHON ERROR';
@@ -1728,7 +1962,7 @@ body.stage-immersive{overflow:hidden}
       }
     }catch(err){
       const message=err instanceof TypeError
-        ? 'Cannot reach CPython. Start the game with python3 server.py, then refresh the page.'
+        ? 'The embedded Python runtime could not load. Check your internet connection (the runtime downloads once), then refresh the page.'
         : 'Python service error: '+err.message;
       addLog(message,'error');world.failed=true;setMapStatus('Python unavailable','error');$('consoleState').textContent='● PYTHON OFFLINE';
     }finally{
@@ -1779,7 +2013,7 @@ body.stage-immersive{overflow:hidden}
 
   /* ===== FIELD MANUAL / SKILL BOOK ===== */
   const skillList=[
-    {key:'skill_move',stage:1,name:'Movement',cmd:'agent.step(n) · agent.collect()'},
+    {key:'skill_move',stage:1,name:'Movement',cmd:'agent.step(n) — chips auto-collect'},
     {key:'skill_turn',stage:6,name:'Turning',cmd:'agent.turn("left" | "right")'},
     {key:'skill_loops',stage:11,name:'Loops',cmd:'for i in range(n):'},
     {key:'skill_if',stage:16,name:'If Checks',cmd:'if agent.wall_ahead(): … else: …'},
@@ -1838,17 +2072,20 @@ body.stage-immersive{overflow:hidden}
   }
   function adminRenderAll(){saveProfile();renderRank();renderProgress();renderLevelCards();}
   function skipNextStage(){
+    if(!adminUnlocked){showToast('ADMIN LOCKED — clearance code required');return;}
     const next=levels.find(lv=>!profile.completed.includes(lv.id));
     if(!next){showToast('ADMIN — campaign already fully cleared');return;}
     adminGrantStage(next.id);adminRenderAll();
     showToast('ADMIN OVERRIDE — Stage '+next.id+' (“'+next.title+'”) cleared');
   }
   function unlockAllStages(){
+    if(!adminUnlocked){showToast('ADMIN LOCKED — clearance code required');return;}
     levels.slice(0,-1).forEach(lv=>adminGrantStage(lv.id));
     adminRenderAll();
     showToast('ADMIN OVERRIDE — all stages unlocked. The final op is yours to play.');
   }
   function resetCampaign(){
+    if(!adminUnlocked){showToast('ADMIN LOCKED — clearance code required');return;}
     profile.completed=[];profile.results={};
     adminRenderAll();
     showToast('ADMIN — campaign progress wiped');
@@ -1894,13 +2131,201 @@ body.stage-immersive{overflow:hidden}
     if(brandTaps>=5){brandTaps=0;toggleAdminPanel();}
   });}
 
+  function syncViewToggle(){const b=$('viewToggle');if(b)b.textContent='VIEW: '+(viewMode==='3d'?'3D':'2D');}
+  $('viewToggle').addEventListener('click',()=>{viewMode=viewMode==='2d'?'3d':'2d';profile.viewMode=viewMode;saveProfile();syncViewToggle();drawMap();});
+  /* --- 3D camera controls: drag to pan, wheel to zoom, double-click to reset --- */
+  let panning=false,lastPX=0,lastPY=0;
+  canvas.addEventListener('pointerdown',e=>{
+    if(viewMode!=='3d')return;
+    panning=true;lastPX=e.clientX;lastPY=e.clientY;
+    if(canvas.setPointerCapture)try{canvas.setPointerCapture(e.pointerId);}catch(_){}
+  });
+  canvas.addEventListener('pointermove',e=>{
+    if(!panning||viewMode!=='3d')return;
+    const dpr=Math.max(1,Math.min(2,window.devicePixelRatio||1));
+    const unitsPerCss=(canvas.width/dpr)/(canvas.clientWidth||1);
+    panX+=(e.clientX-lastPX)*unitsPerCss;panY+=(e.clientY-lastPY)*unitsPerCss;
+    lastPX=e.clientX;lastPY=e.clientY;drawMap();
+  });
+  canvas.addEventListener('pointerup',()=>{panning=false;});
+  canvas.addEventListener('pointercancel',()=>{panning=false;});
+  canvas.addEventListener('wheel',e=>{
+    if(viewMode!=='3d')return;e.preventDefault();
+    zoom=Math.max(0.55,Math.min(2.4,zoom*(e.deltaY<0?1.1:1/1.1)));drawMap();
+  },{passive:false});
+  canvas.addEventListener('dblclick',()=>{if(viewMode!=='3d')return;panX=0;panY=0;zoom=1;drawMap();});
+  $('objectiveText').addEventListener('click',()=>{const lv=currentLevel();if(lv&&!busy)showBriefing(lv);});
+  /* ===== OPERATIVE ACCOUNTS ===== */
+  const CODENAMES=['Falcon','Viper','Raven','Ghost','Onyx','Wolf','Hawk','Cobra','Lynx','Spectre'];
+  const NAME_RE=/^[\p{L}\p{N}][\p{L}\p{N} _\-.]{1,15}$/u;
+  const normName=n=>String(n||'').trim();
+  const playerKey=n=>normName(n).toLowerCase();
+  function renderOperative(){
+    const pill=$('operPill');if(!pill)return;
+    if(activePlayer){pill.hidden=false;$('operName').textContent=activePlayer.name;}else pill.hidden=true;
+  }
+  function profileSummary(key){
+    let done=0,stars=0;
+    try{
+      const pr=JSON.parse(localStorage.getItem(PROFILE_PFX+key)||'null');
+      if(pr){done=Array.isArray(pr.completed)?pr.completed.length:0;
+        stars=Object.values(pr.results||{}).reduce((sum,r)=>sum+((r&&r.bestStars)||0),0);}
+    }catch(_){}
+    return {done,stars};
+  }
+  function renderPlayerList(){
+    const list=$('playerList');list.innerHTML='';
+    const players=readPlayers();
+    const keys=Object.keys(players).sort((a,b)=>(players[b].last||0)-(players[a].last||0));
+    const session=getSession();
+    if(!keys.length){
+      const empty=document.createElement('div');empty.className='player-empty';
+      empty.textContent='No operative files on record yet. Open your first file to begin the campaign.';
+      list.appendChild(empty);return;
+    }
+    keys.forEach(k=>{
+      const p=players[k];const sum=profileSummary(k);
+      const row=document.createElement('div');row.className='player-row'+(k===session?' continue':'');
+      const name=document.createElement('div');name.className='player-name';name.textContent=p.name;
+      const meta=document.createElement('div');meta.className='player-meta';
+      meta.textContent=sum.done+' / '+levels.length+' stages · ★ '+sum.stars;
+      const enter=document.createElement('button');enter.className='player-enter';
+      enter.textContent=k===session?'CONTINUE':'ENTER';
+      enter.addEventListener('click',()=>enterAsPlayer(k));
+      const del=document.createElement('button');del.className='player-del';del.textContent='✕';del.title='Shred this operative file';
+      del.addEventListener('click',()=>{
+        if(del.dataset.arm==='1'){deletePlayer(k);}
+        else{del.dataset.arm='1';del.textContent='SURE?';setTimeout(()=>{del.dataset.arm='';del.textContent='✕';},2600);}
+      });
+      row.append(name,meta,enter,del);list.appendChild(row);
+    });
+  }
+  function showPlayerScreen(){
+    renderPlayerList();
+    $('playerScreen').hidden=false;$('hubScreen').hidden=true;$('gameScreen').hidden=true;
+    const inp=$('playerName');if(inp){inp.value='';inp.focus();}
+    const msg=$('playerMsg');if(msg)msg.hidden=true;
+    const sug=$('playerSuggest');if(sug)sug.innerHTML='';
+  }
+  function enterAsPlayer(key,silent){
+    const players=readPlayers();const p=players[key];if(!p)return;
+    let raw=null;try{raw=JSON.parse(localStorage.getItem(PROFILE_PFX+key)||'null');}catch(_){}
+    profile=normalizeProfile(raw);
+    activePlayer={key:key,name:p.name};
+    p.last=Date.now();writePlayers(players);setSession(key);saveProfile();
+    $('playerScreen').hidden=true;$('hubScreen').hidden=false;$('gameScreen').hidden=true;
+    viewMode=profile.viewMode==='3d'?'3d':'2d';syncViewToggle();
+    renderRank();renderProgress();renderLevelCards();updateEditorMeta();syncFullscreenControls();renderOperative();
+    if(!silent)showToast('File opened — welcome'+(p.name?', '+p.name:'')+'. Progress saves automatically.');
+  }
+  function suggestNames(name){
+    const players=readPlayers();const base=normName(name);const out=[];
+    let n=2;while(players[playerKey(base+'-'+n)])n++;
+    out.push(base+'-'+n,base+'-'+(n+1));
+    const code=CODENAMES[Math.floor(Math.random()*CODENAMES.length)]+'-'+(10+Math.floor(Math.random()*90));
+    if(!players[playerKey(code)])out.push(code);
+    return out;
+  }
+  function tryCreatePlayer(){
+    const inp=$('playerName'),msg=$('playerMsg'),sug=$('playerSuggest');
+    const name=normName(inp.value);
+    msg.className='player-msg bad';sug.innerHTML='';
+    if(!NAME_RE.test(name)){
+      msg.textContent='Name must be 2–16 characters: letters, numbers, spaces or dashes.';msg.hidden=false;return;
+    }
+    if(readPlayers()[playerKey(name)]){
+      msg.textContent='“'+name+'” is already taken — take one of these instead:';msg.hidden=false;
+      suggestNames(name).forEach(sg=>{
+        const chip=document.createElement('button');chip.className='player-chip';chip.textContent=sg;
+        chip.addEventListener('click',()=>{inp.value=sg;msg.hidden=true;sug.innerHTML='';inp.focus();});
+        sug.appendChild(chip);
+      });
+      return;
+    }
+    const players=readPlayers();const key=playerKey(name);
+    players[key]={name:name,created:Date.now(),last:Date.now()};writePlayers(players);
+    enterAsPlayer(key,true);
+    showToast('Operative file opened — welcome to the Agency, '+name+'.');
+  }
+  function deletePlayer(key){
+    const players=readPlayers();const p=players[key];if(!p)return;
+    delete players[key];writePlayers(players);
+    try{localStorage.removeItem(PROFILE_PFX+key);}catch(_){}
+    if(getSession()===key){try{localStorage.removeItem(SESSION_KEY);}catch(_){}}
+    renderPlayerList();
+    showToast('Operative file shredded: '+p.name+'.');
+  }
+  $('playerCreate').addEventListener('click',tryCreatePlayer);
+  $('playerName').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();tryCreatePlayer();}});
+  $('operPill').addEventListener('click',()=>{
+    if(busy||!$('gameScreen').hidden)return;
+    saveProfile();showPlayerScreen();
+  });
+
   function boot(){
-    $('hubScreen').hidden=false;$('gameScreen').hidden=true;
+    migrateLegacyProfile();
+    $('hubScreen').hidden=true;$('gameScreen').hidden=true;
+    showPlayerScreen();
+    viewMode=profile.viewMode==='3d'?'3d':'2d';syncViewToggle();
     renderRank();renderProgress();renderLevelCards();updateEditorMeta();syncFullscreenControls();
+    (function animLoop(t){animT=t||0;if(!$('gameScreen').hidden&&world)drawMap();requestAnimationFrame(animLoop);})(0);
   }
   boot();
+  window.__levels=levels;
+  window.__addLog=addLog;
 })();
 </script>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.4/full/pyodide.js"></script>
+<script>
+/* ===== STANDALONE RUNTIME: real CPython in the browser via Pyodide ===== */
+const SANDBOX_PY="\nimport ast\nimport json\nimport math\nimport sys\nimport traceback\ntry:\n    import resource\nexcept ImportError:\n    resource = None\n\nif resource is not None:\n    try:\n        resource.setrlimit(resource.RLIMIT_CPU, (5, 5))\n        resource.setrlimit(resource.RLIMIT_AS, (256 * 1024 * 1024, 256 * 1024 * 1024))\n        resource.setrlimit(resource.RLIMIT_FSIZE, (0, 0))\n    except Exception:\n        pass\n\nDIRECTIONS = {\"right\": (1, 0), \"left\": (-1, 0), \"up\": (0, -1), \"down\": (0, 1)}\nclass CodeRejected(Exception): pass\nclass GameStop(Exception): pass\nclass MissionComplete(Exception): pass\n\nALLOWED_NODES = (\n    ast.Module, ast.Expr, ast.Assign, ast.AugAssign, ast.If, ast.For, ast.While,\n    ast.Break, ast.Continue, ast.Pass, ast.Name, ast.Load, ast.Store,\n    ast.Constant, ast.Call, ast.Attribute, ast.keyword, ast.BinOp, ast.UnaryOp, ast.BoolOp,\n    ast.Compare, ast.IfExp, ast.List, ast.Tuple, ast.Set, ast.Dict, ast.Subscript,\n    ast.Slice, ast.JoinedStr, ast.FormattedValue, ast.FunctionDef, ast.arguments,\n    ast.arg, ast.Return, ast.Assert,\n    ast.Add, ast.Sub, ast.Mult, ast.Div, ast.FloorDiv, ast.Mod,\n    ast.UAdd, ast.USub, ast.Not, ast.And, ast.Or,\n    ast.Eq, ast.NotEq, ast.Lt, ast.LtE, ast.Gt, ast.GtE, ast.In, ast.NotIn,\n)\nGAME_CALLS = {\"move\", \"collect\", \"interact\", \"disable_camera\", \"wall_ahead\", \"camera_ahead\"}\nAGENT_METHODS = {\"step\", \"turn\", \"collect\", \"interact\", \"wall_ahead\", \"camera_ahead\", \"disable_camera\"}\nSAFE_CALLS = GAME_CALLS | {\"range\", \"len\", \"min\", \"max\", \"abs\", \"sum\", \"round\", \"int\", \"float\", \"str\", \"bool\", \"enumerate\", \"zip\", \"sorted\", \"any\", \"all\", \"print\"}\n\nclass Guard(ast.NodeVisitor):\n    def __init__(self, level_id, tree):\n        self.level_id = level_id\n        self.function_names = {node.name for node in ast.walk(tree) if isinstance(node, ast.FunctionDef)}\n    def generic_visit(self, node):\n        if type(node) not in ALLOWED_NODES:\n            line = getattr(node, \"lineno\", 1)\n            raise CodeRejected(\"Line %s: %s is not enabled in this training sandbox.\" % (line, type(node).__name__))\n        super().generic_visit(node)\n    def visit_If(self, node):\n        if self.level_id < 16: raise CodeRejected(\"Line %s: if statements unlock in Stage 16.\" % node.lineno)\n        self.generic_visit(node)\n    def visit_IfExp(self, node):\n        if self.level_id < 16: raise CodeRejected(\"Line %s: conditional expressions unlock in Stage 16.\" % node.lineno)\n        self.generic_visit(node)\n    def visit_For(self, node):\n        if self.level_id < 11: raise CodeRejected(\"Line %s: for loops unlock in Stage 11.\" % node.lineno)\n        self.generic_visit(node)\n    def visit_While(self, node):\n        if self.level_id < 11: raise CodeRejected(\"Line %s: while loops unlock in Stage 11.\" % node.lineno)\n        self.generic_visit(node)\n    def visit_FunctionDef(self, node):\n        if self.level_id < 31: raise CodeRejected(\"Line %s: def functions unlock in Stage 31.\" % node.lineno)\n        if node.decorator_list: raise CodeRejected(\"Line %s: decorators are disabled in the training sandbox.\" % node.lineno)\n        if node.name in SAFE_CALLS or node.name in GAME_CALLS or node.name in AGENT_METHODS or node.name in (\"agent\", \"__builtins__\"):\n            raise CodeRejected(\"Line %s: choose a different function name.\" % node.lineno)\n        self.generic_visit(node)\n    def visit_Name(self, node):\n        if node.id == \"agent\" and isinstance(node.ctx, ast.Store):\n            raise CodeRejected(\"Line %s: 'agent' is your field character; do not replace its name.\" % getattr(node, \"lineno\", 1))\n        self.generic_visit(node)\n    def visit_Attribute(self, node):\n        if not isinstance(node.value, ast.Name) or node.value.id != \"agent\" or node.attr not in AGENT_METHODS:\n            raise CodeRejected(\"Line %s: only approved agent commands can be used after a dot.\" % getattr(node, \"lineno\", 1))\n        self.generic_visit(node)\n    def visit_Call(self, node):\n        if isinstance(node.func, ast.Attribute):\n            allowed_agent_call = (isinstance(node.func.value, ast.Name) and node.func.value.id == \"agent\" and node.func.attr in AGENT_METHODS)\n            if not allowed_agent_call:\n                raise CodeRejected(\"Line %s: only approved Python and agent commands can be called.\" % getattr(node, \"lineno\", 1))\n            name = node.func.attr\n        elif isinstance(node.func, ast.Name) and (node.func.id in SAFE_CALLS or node.func.id in self.function_names):\n            name = node.func.id\n        else:\n            raise CodeRejected(\"Line %s: only approved Python and agent commands can be called.\" % getattr(node, \"lineno\", 1))\n        minimum = {\"turn\": 6, \"range\": 11, \"interact\": 21, \"wall_ahead\": 16, \"camera_ahead\": 26, \"disable_camera\": 26}.get(name, 1)\n        if self.level_id < minimum:\n            raise CodeRejected(\"Line %s: %s() unlocks in Stage %s.\" % (node.lineno, name, minimum))\n        self.generic_visit(node)\n\ndef bounded_range(*args):\n    result = range(*args)\n    if len(result) > 90:\n        raise GameStop(\"A single range() loop is limited to 90 iterations in the simulator.\")\n    return result\n\ndef run(payload):\n    code = payload.get(\"code\", \"\")\n    level_id = payload.get(\"levelId\")\n    if not isinstance(code, str) or len(code) > 12000:\n        return {\"ok\": False, \"error\": \"Code is too long. Keep a mission program under 12,000 characters.\", \"events\": [], \"actions\": 0, \"output\": [], \"complete\": False}\n    if not isinstance(level_id, int) or level_id not in range(1, 61):\n        return {\"ok\": False, \"error\": \"Unknown mission.\", \"events\": [], \"actions\": 0, \"output\": [], \"complete\": False}\n    try:\n        tree = ast.parse(code, filename=\"operation.py\", mode=\"exec\")\n    except SyntaxError as exc:\n        return {\"ok\": False, \"error\": \"Line %s: SyntaxError: %s\" % (exc.lineno or 1, exc.msg), \"events\": [], \"actions\": 0, \"output\": [], \"complete\": False}\n    try:\n        Guard(level_id, tree).visit(tree)\n    except CodeRejected as exc:\n        return {\"ok\": False, \"error\": str(exc), \"events\": [], \"actions\": 0, \"output\": [], \"complete\": False}\n\n    def reject(reason):\n        return {\"ok\": False, \"error\": reason, \"events\": [], \"actions\": 0, \"output\": [], \"complete\": False}\n\n    # HQ program style: one instruction per line, indented blocks after ':'.\n    for node in ast.walk(tree):\n        suites = []\n        if isinstance(node, ast.Module):\n            suites.append(node.body)\n        elif isinstance(node, (ast.FunctionDef, ast.For, ast.While, ast.With)):\n            suites.append(node.body)\n        elif isinstance(node, ast.If):\n            suites.extend([node.body, node.orelse])\n        for suite in suites:\n            for i in range(len(suite) - 1):\n                if suite[i].lineno == suite[i + 1].lineno:\n                    return reject(\"Line %s: HQ style — write one instruction per line. ';' packing is not allowed in mission programs.\" % suite[i + 1].lineno)\n        if isinstance(node, (ast.FunctionDef, ast.For, ast.While, ast.If, ast.With)) and node.body and node.body[0].lineno == node.lineno:\n            return reject(\"Line %s: HQ style — start the block after ':' on the next indented line.\" % node.lineno)\n\n    level = json.loads(payload[\"levelJson\"])\n\n    # HQ training requirement: this stage's chapter skill must actually be used.\n    required = level.get(\"require\")\n    if required:\n        predicates = {\n            \"loop\": lambda n: isinstance(n, (ast.For, ast.While)),\n            \"if\": lambda n: isinstance(n, (ast.If, ast.IfExp)),\n            \"def\": lambda n: isinstance(n, ast.FunctionDef),\n            \"assign\": lambda n: isinstance(n, (ast.Assign, ast.AugAssign)),\n            \"while\": lambda n: isinstance(n, ast.While),\n            \"logic\": lambda n: isinstance(n, ast.BoolOp) or (isinstance(n, ast.UnaryOp) and isinstance(n.op, ast.Not)),\n            \"list\": lambda n: isinstance(n, ast.List),\n            \"args\": lambda n: isinstance(n, ast.FunctionDef) and len(n.args.args) > 0,\n        }[required]\n        names = {\n            \"loop\": \"a loop (for i in range(n): ...)\",\n            \"if\": \"an if check (if agent.wall_ahead(): ...)\",\n            \"def\": \"a function (def name(): ...)\",\n            \"assign\": \"a variable (store a value with d = 3 and use it)\",\n            \"while\": \"a while loop (while not agent.wall_ahead(): ...)\",\n            \"logic\": \"combined conditions (and / or / not)\",\n            \"list\": \"a list (steps = [2, 1, 3] and loop over it)\",\n            \"args\": \"a function that takes an argument (def hop(n): ...)\",\n        }[required]\n        if not any(predicates(node) for node in ast.walk(tree)):\n            return reject(\"HQ requirement: this stage trains %s — write one into your program and run it again.\" % names)\n\n    state = {\n        \"pos\": list(level[\"start\"]),\n        \"facing\": \"right\",\n        \"inventory\": set(),\n        \"items\": [dict(item) for item in level[\"items\"]],\n        \"open_doors\": set(),\n        \"disabled_cameras\": set(),\n        \"intel_total\": sum(1 for item in level[\"items\"] if item[\"type\"] == \"intel\"),\n        \"intel_got\": 0,\n        \"actions\": 0,\n        \"events\": [],\n        \"output\": [],\n        \"complete\": False,\n    }\n\n    pickup0 = [item for item in state[\"items\"] if item[\"x\"] == state[\"pos\"][0] and item[\"y\"] == state[\"pos\"][1]]\n    for _item in pickup0:\n        state[\"inventory\"].add(_item[\"type\"])\n        if _item[\"type\"] == \"intel\": state[\"intel_got\"] += 1\n        state[\"items\"].remove(_item)\n\n    def count_action():\n        if state[\"actions\"] >= 90:\n            raise GameStop(\"Safety stop: a program may use at most 90 game actions.\")\n        state[\"actions\"] += 1\n\n    def valid_direction(direction):\n        if not isinstance(direction, str) or direction not in DIRECTIONS:\n            raise GameStop(\"Direction must be one of: right, left, up, down.\")\n        return DIRECTIONS[direction]\n\n    def wall_at(x, y):\n        return (x <= 0 or y <= 0 or x >= level[\"cols\"] - 1 or y >= level[\"rows\"] - 1\n                or [x, y] in level[\"walls\"])\n\n    def door_at(x, y):\n        for door in level[\"doors\"]:\n            if door[\"x\"] == x and door[\"y\"] == y: return door\n        return None\n\n    def door_open(door): return door[\"id\"] in state[\"open_doors\"]\n\n    def blocked_at(x, y):\n        door = door_at(x, y)\n        return wall_at(x, y) or (door is not None and not door_open(door))\n\n    def wall_ahead(direction=None):\n        dx, dy = valid_direction(direction or state[\"facing\"])\n        x, y = state[\"pos\"]\n        return blocked_at(x + dx, y + dy)\n\n    def camera_ahead(direction=None):\n        dx, dy = valid_direction(direction or state[\"facing\"])\n        x, y = state[\"pos\"]; target = (x + dx, y + dy)\n        return any(cam[\"id\"] not in state[\"disabled_cameras\"] and (cam[\"x\"], cam[\"y\"]) == target for cam in level[\"cameras\"])\n\n    def emit(name, args): state[\"events\"].append({\"name\": name, \"args\": list(args)})\n\n    def move(direction):\n        count_action(); dx, dy = valid_direction(direction)\n        x, y = state[\"pos\"]; nx, ny = x + dx, y + dy\n        if wall_at(nx, ny): raise GameStop(\"The agent is blocked by a wall to the %s.\" % direction)\n        door = door_at(nx, ny)\n        if door is not None and not door_open(door): raise GameStop(\"Access denied—the door is locked. Stand beside it and run agent.interact().\")\n        for cam in level[\"cameras\"]:\n            if cam[\"id\"] not in state[\"disabled_cameras\"] and [nx, ny] in cam[\"danger\"]:\n                raise GameStop(\"Alarm! You entered the camera’s field of view. Try disabling it first.\")\n        emit(\"move\", [direction]); state[\"facing\"] = direction; state[\"pos\"] = [nx, ny]\n        pickup()\n        if [nx, ny] == level[\"exit\"]:\n            state[\"complete\"] = True\n            raise MissionComplete()\n\n    def pickup():\n        found = [item for item in state[\"items\"] if item[\"x\"] == state[\"pos\"][0] and item[\"y\"] == state[\"pos\"][1]]\n        for item in found:\n            state[\"inventory\"].add(item[\"type\"])\n            if item[\"type\"] == \"intel\": state[\"intel_got\"] += 1\n            state[\"items\"].remove(item)\n        if found: emit(\"pickup\", [item[\"type\"] for item in found])\n\n    def collect():\n        count_action(); emit(\"collect\", [])\n        pickup()\n\n    def interact():\n        count_action(); x, y = state[\"pos\"]\n        door = next((d for d in level[\"doors\"] if d[\"id\"] not in state[\"open_doors\"] and abs(d[\"x\"]-x)+abs(d[\"y\"]-y)==1), None)\n        if door is None:\n            emit(\"interact\", []); return\n        if \"badge\" not in state[\"inventory\"]: raise GameStop(\"The door is locked—you need to collect the access badge first.\")\n        state[\"open_doors\"].add(door[\"id\"]); emit(\"interact\", [])\n\n    def disable_camera():\n        count_action(); x, y = state[\"pos\"]\n        cam = next((c for c in level[\"cameras\"] if c[\"id\"] not in state[\"disabled_cameras\"] and abs(c[\"x\"]-x)+abs(c[\"y\"]-y)==1), None)\n        if cam is None: raise GameStop(\"No active camera in range. Move closer before using agent.disable_camera().\")\n        state[\"disabled_cameras\"].add(cam[\"id\"]); emit(\"disable_camera\", [])\n\n    def safe_print(*args, sep=\" \", end=\"\\n\"):\n        if len(state[\"output\"]) >= 30: raise GameStop(\"print() is limited to 30 lines per run.\")\n        text = sep.join(str(arg) for arg in args) + end\n        state[\"output\"].append(text[:500])\n\n    class AgentAPI:\n        def step(self, count):\n            if type(count) is not int or count < 1 or count > 50:\n                raise GameStop(\"agent.step(number) needs a whole number from 1 to 50.\")\n            for _ in range(count):\n                move(state[\"facing\"])\n        def turn(self, side):\n            if not isinstance(side, str) or side not in (\"left\", \"right\"):\n                raise GameStop('agent.turn() needs \"left\" or \"right\".')\n            turns = {\n                \"right\": {\"left\": \"up\", \"right\": \"down\"},\n                \"down\": {\"left\": \"right\", \"right\": \"left\"},\n                \"left\": {\"left\": \"down\", \"right\": \"up\"},\n                \"up\": {\"left\": \"left\", \"right\": \"right\"},\n            }\n            count_action()\n            state[\"facing\"] = turns[state[\"facing\"]][side]\n            emit(\"turn\", [side, state[\"facing\"]])\n            return state[\"facing\"]\n        def collect(self): return collect()\n        def interact(self): return interact()\n        def wall_ahead(self, direction=None): return wall_ahead(direction)\n        def camera_ahead(self, direction=None): return camera_ahead(direction)\n        def disable_camera(self): return disable_camera()\n\n    field_agent = AgentAPI()\n    builtins = {\n        \"range\": bounded_range, \"len\": len, \"min\": min, \"max\": max, \"abs\": abs,\n        \"sum\": sum, \"round\": round, \"int\": int, \"float\": float, \"str\": str,\n        \"bool\": bool, \"enumerate\": enumerate, \"zip\": zip, \"sorted\": sorted,\n        \"any\": any, \"all\": all, \"print\": safe_print,\n    }\n    namespace = {\n        \"__builtins__\": builtins,\n        \"agent\": field_agent,\n        \"_tick\": _tick,\n        \"move\": move, \"collect\": collect, \"interact\": interact,\n        \"disable_camera\": disable_camera, \"wall_ahead\": wall_ahead,\n        \"camera_ahead\": camera_ahead,\n    }\n    result = {\"ok\": True, \"error\": None, \"events\": state[\"events\"], \"actions\": 0, \"output\": state[\"output\"], \"complete\": False}\n    try:\n        tree = _instrument_loops(tree)\n        exec(compile(tree, \"operation.py\", \"exec\"), namespace, namespace)\n    except MissionComplete:\n        state[\"complete\"] = True\n    except (GameStop, CodeRejected) as exc:\n        result[\"error\"] = str(exc)\n    except Exception as exc:\n        frames = traceback.extract_tb(exc.__traceback__)\n        user_frames = [frame for frame in frames if frame.filename == \"operation.py\"]\n        line = user_frames[-1].lineno if user_frames else 1\n        message = str(exc) or type(exc).__name__\n        result[\"error\"] = \"Line %s: %s: %s\" % (line, type(exc).__name__, message[:220])\n    result[\"events\"] = state[\"events\"]\n    result[\"actions\"] = state[\"actions\"]\n    result[\"intelGot\"] = state[\"intel_got\"]\n    result[\"intelTotal\"] = state[\"intel_total\"]\n    result[\"output\"] = state[\"output\"]\n    result[\"complete\"] = state[\"complete\"]\n    return result\n\n\n_loop_budget = [8000]\ndef _tick():\n    _loop_budget[0] -= 1\n    if _loop_budget[0] <= 0:\n        raise GameStop(\"Safety stop: a loop repeated too many times.\")\n\nclass _LoopInstrumenter(ast.NodeTransformer):\n    def visit_For(self, node):\n        self.generic_visit(node)\n        node.body.insert(0, ast.Expr(value=ast.Call(func=ast.Name(id=\"_tick\", ctx=ast.Load()), args=[], keywords=[])))\n        return node\n    def visit_While(self, node):\n        self.generic_visit(node)\n        node.body.insert(0, ast.Expr(value=ast.Call(func=ast.Name(id=\"_tick\", ctx=ast.Load()), args=[], keywords=[])))\n        return node\n\ndef _instrument_loops(tree):\n    _loop_budget[0] = 8000\n    return ast.fix_missing_locations(_LoopInstrumenter().visit(tree))\n\ndef run_json(payload_json):\n    try:\n        response = run(json.loads(payload_json))\n    except Exception as exc:\n        response = {\"ok\": False, \"error\": (\"Python runtime error: \" + str(exc))[:220], \"events\": [], \"actions\": 0, \"output\": [], \"complete\": False}\n    return json.dumps(response, ensure_ascii=False)\n";
+const REQUIRE_KEYS={"11": "loop", "12": "loop", "13": "loop", "14": "loop", "15": "loop", "16": "if", "17": "if", "18": "if", "19": "if", "20": "if", "31": "def", "32": "def", "33": "def", "34": "def", "35": "def", "36": "assign", "37": "assign", "38": "assign", "39": "assign", "40": "assign", "41": "while", "42": "while", "43": "while", "44": "while", "45": "while", "46": "logic", "47": "logic", "48": "logic", "49": "logic", "50": "logic", "51": "list", "52": "list", "53": "list", "54": "list", "55": "list", "56": "args", "57": "args", "58": "args", "59": "args", "60": "args"};
+let _pyodidePromise=null;
+function ensurePyodide(){
+  if(_pyodidePromise)return _pyodidePromise;
+  _pyodidePromise=(async()=>{
+    if(window.__addLog)window.__addLog('Booting the embedded CPython runtime (Pyodide) \u2014 a one-time download of a few MB\u2026','system');
+    const state=document.getElementById('consoleState');if(state)state.textContent='\u25cf LOADING PYTHON\u2026';
+    let waited=0;
+    while(typeof loadPyodide!=='function'){
+      if(waited>20000)throw new Error('The Pyodide CDN script did not load \u2014 check your internet connection and refresh.');
+      await new Promise(r=>setTimeout(r,100));waited+=100;
+    }
+    const py=await loadPyodide();
+    py.runPython(SANDBOX_PY);
+    if(window.__addLog)window.__addLog('CPython runtime ready \u2014 mission programs now run locally in your browser.','success');
+    return py;
+  })().catch(err=>{_pyodidePromise=null;throw err;});
+  return _pyodidePromise;
+}
+function toServerLevel(lv){
+  return {cols:lv.cols,rows:lv.rows,start:[lv.start.x,lv.start.y],exit:[lv.exit.x,lv.exit.y],
+    walls:(lv.walls||[]).map(w=>[w.x,w.y]),
+    doors:(lv.doors||[]).map(d=>({id:d.id,x:d.x,y:d.y})),
+    cameras:(lv.cameras||[]).map(c=>({id:c.id,x:c.x,y:c.y,danger:(c.danger||[]).map(d=>[d.x,d.y])})),
+    items:(lv.items||[]).map(i=>({type:i.type,x:i.x,y:i.y,label:i.label||''})),
+    require:REQUIRE_KEYS[lv.id]||null};
+}
+/* Start the one-time runtime download the moment a stage card is clicked,
+   so it is usually ready by the time the player presses RUN. */
+document.addEventListener('click',function(e){
+  const grid=document.getElementById('levelGrid');
+  if(grid&&grid.contains(e.target))ensurePyodide().catch(function(){});
+},true);
+async function runSandbox(code,levelId){
+  const py=await ensurePyodide();
+  const lv=(window.__levels||[]).find(l=>l.id===levelId);
+  const payload={code:code,levelId:levelId,levelJson:JSON.stringify(toServerLevel(lv))};
+  const runJson=py.globals.get('run_json');
+  try{
+    return JSON.parse(runJson(JSON.stringify(payload)));
+  }finally{
+    if(runJson.destroy)runJson.destroy();
+  }
+}
+</script>
+
 <script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4bc70e2c01a94c73b74392e4234840661791215815920" integrity="sha512-L0ha0OXavK/8okipN9F8BtP84dg9DUhPERbBXzwI6dgTA55d2+yweo3pn5CSFYs45/r8md2+xvUPtTdvTNRfjA==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","spa":2}' crossorigin="anonymous"></script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4808be508ff9a56',t:'MTc5MTU4MjA1NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a4846c2a7bc8ae7c',t:'MTc5MTYyMjY5OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
